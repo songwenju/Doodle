@@ -9,16 +9,26 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zhangshuo.doodle.R;
+import com.zhangshuo.doodle.base.BaseApplication;
+import com.zhangshuo.doodle.logic.FileUtils;
+import com.zhangshuo.doodle.logic.UIUitl;
 import com.zhangshuo.doodle.weight.ColorPickerDialog;
 import com.zhangshuo.doodle.weight.DrawView;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -38,10 +48,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView iv_eraser;
     private ImageView iv_color;
     private LinearLayout bottom;
-    private TextView tv_penWidth;
+//    private TextView tv_penWidth;
     private LinearLayout eraserLayout;
     private LinearLayout rotateLayout;
     private ImageView iv_rotate;
+    private LinearLayout penLayout;
+    private View wait;
+    private SeekBar penAlpth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +67,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @SuppressWarnings("ConstantConditions")
     private void initEvent() {
+        penAlpth.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(progress<1)
+                    progress = 1;
+                drawView.setAlpha(progress);
+            }
 
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
         penWidth.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (progress < 1)
                     progress = 1;
                 drawView.setPaintWidth(progress);
-                tv_penWidth.setText(progress + "");
+//                tv_penWidth.setText(progress + "");
             }
 
             @Override
@@ -100,25 +130,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             findViewById(R.id.color_7).setOnClickListener(this);
             findViewById(R.id.color_8).setOnClickListener(this);
         }
+        //画笔选择区点击事件
+        findViewById(R.id.pen1).setOnClickListener(this);
+        findViewById(R.id.pen2).setOnClickListener(this);
+        findViewById(R.id.pen3).setOnClickListener(this);
+        findViewById(R.id.pen4).setOnClickListener(this);
+        findViewById(R.id.pen5).setOnClickListener(this);
     }
 
     private void initView() {
         //画布
         drawView = (DrawView)findViewById(R.id.drawActivity);
-
+        assert drawView != null;
+        FrameLayout.LayoutParams params = ((FrameLayout.LayoutParams) drawView.getLayoutParams());
+        params.height = UIUitl.getWindowWidth();
+        params.width = UIUitl.getWindowWidth();
+        drawView.setLayoutParams(params);
         /**
          * 底部按钮
          */
         bottom = ((LinearLayout) findViewById(R.id.bottom));
         //颜色选择面板
         colorLayout = ((ScrollView) findViewById(R.id.color_layout));
-        colorLayout.setVisibility(View.GONE);
         //橡皮擦面板
         eraserLayout = ((LinearLayout) findViewById(R.id.eraser_layout));
-        eraserLayout.setVisibility(View.GONE);
         //旋转面板
         rotateLayout = ((LinearLayout) findViewById(R.id.rotate_layout));
-        rotateLayout.setVisibility(View.GONE);
+        //画笔面板
+        penLayout = (LinearLayout)findViewById(R.id.pen_layout);
         //画笔
         pen = ((LinearLayout) findViewById(R.id.pen));
         iv_pen = ((ImageView) findViewById(R.id.iv_pen));//画笔图标
@@ -133,7 +172,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         iv_rotate= (ImageView)findViewById(R.id.iv_rotate);
         //画笔宽度
         penWidth = ((SeekBar) findViewById(R.id.seekBar));
-        tv_penWidth = ((TextView) findViewById(R.id.pen_width));
+        //画笔透明度
+        penAlpth = ((SeekBar) findViewById(R.id.seekBar1));
+
+//        tv_penWidth = ((TextView) findViewById(R.id.pen_width));
+
+        wait = findViewById(R.id.wait);
 
     }
 
@@ -206,13 +250,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 保存图片
      */
     private void savePic() {
-        Toast.makeText(this,"保存图片",Toast.LENGTH_SHORT).show();
+        wait.setVisibility(View.VISIBLE);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss", Locale.CHINA);
+                final String f = FileUtils.saveBitmap(drawView.getCacheBitmap(),format.format(new Date()));
+                UIUitl.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        wait.setVisibility(View.GONE);
+                        Toast.makeText(MainActivity.this,f,Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
+
     }
 
     /**
      * 分享图片
      */
     private void sharePic() {
+
         Toast.makeText(this,"分享",Toast.LENGTH_SHORT).show();
     }
 
@@ -244,6 +304,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawView.paint.setXfermode(null);//取消擦出效果
         colorLayout.setVisibility(View.GONE);
         eraserLayout.setVisibility(View.GONE);
+        penLayout.setVisibility(View.GONE);
         switch (v.getId()){
             case R.id.pen:
                 if(View.VISIBLE == rotateLayout.getVisibility())
@@ -251,6 +312,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 iv_pen.setBackgroundResource(R.mipmap.icon_bg_pen);
                 iv_eraser.setBackgroundResource(R.mipmap.icon_bg_default);
                 iv_rotate.setBackgroundResource(R.mipmap.icon_bg_default);
+                penLayout.setVisibility(View.VISIBLE);
+                break;
+            case R.id.pen1:
+                drawView.setMaskFilter(DrawView.PEN_TYPE.PLAIN_PEN);
+                iv_pen.setImageResource(R.mipmap.icon_pencil);
+                penLayout.setVisibility(View.GONE);
+                break;
+            case R.id.pen2:
+                drawView.setMaskFilter(DrawView.PEN_TYPE.BLUR);
+                iv_pen.setImageResource(R.mipmap.icon_blur);
+                penLayout.setVisibility(View.GONE);
+                break;
+            case R.id.pen3:
+                drawView.setMaskFilter(DrawView.PEN_TYPE.EMBOSS);
+                iv_pen.setImageResource(R.mipmap.icon_emboss);
+                penLayout.setVisibility(View.GONE);
+                break;
+            case R.id.pen4:
+                drawView.setMaskFilter(DrawView.PEN_TYPE.TS_PEN);
+                iv_pen.setImageResource(R.mipmap.icon_tspen);
+                penLayout.setVisibility(View.GONE);
+                break;
+            case R.id.pen5:
+                drawView.setMaskFilter(DrawView.PEN_TYPE.FLUORESCENT);
+                iv_pen.setImageResource(R.mipmap.icon_fluorescent);
+                penLayout.setVisibility(View.GONE);
                 break;
 
             case R.id.eraser:

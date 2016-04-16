@@ -21,7 +21,7 @@
             </group>
         </menu>
     </item>
-    <item android:id="@+id/clear" android:title="擦除绘画"/>
-    <item android:id="@+id/save" android:title="保存绘画"/>
-    <item android:id="@+id/fullClear" android:title="清空画板"/>
+    <item android:id="@+id/insert" android:title="导入"/>
+    <item android:id="@+id/save" android:title="保存"/>
+    <item android:id="@+id/share" android:title="分享"/>
 </menu>
