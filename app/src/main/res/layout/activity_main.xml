@@ -1,12 +1,453 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/frameLayout_1"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout_1"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <com.zhangshuo.doodle.weight.DrawView
-        android:id="@+id/drawActivity_1"
+    <FrameLayout
+        android:layout_above="@+id/bottom"
+        android:layout_below="@+id/head_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</FrameLayout>
+        android:layout_height="match_parent">
+
+        <com.zhangshuo.doodle.weight.DrawView
+            android:id="@+id/drawActivity"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/layout_bottom"/>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/eraser_layout"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <LinearLayout
+                android:id="@+id/eraser1"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_eraser1"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_eraser"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/black_80"
+                    android:text="橡皮"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/eraser2"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/iv_eraser2"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_clear"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/black_80"
+                    android:text="清空"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/rotate_layout"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <LinearLayout
+                android:id="@+id/rotate1"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_rotate1"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_iso"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/black_80"
+                    android:text="镜像"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rotate2"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/iv_rotate2"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_rotate"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/black_80"
+                    android:text="旋转"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/pen_layout"
+            android:weightSum="5"
+            android:orientation="horizontal"
+            android:background="@color/transparent"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <LinearLayout
+                android:id="@+id/pen1"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_pencil"
+                    android:id="@+id/iv_pen1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"/>
+
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/black_80"
+                    android:text="铅笔"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/pen2"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_pen2"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_blur"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/black_80"
+                    android:text="毛笔"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/pen3"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/iv_pen3"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_emboss"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/black_80"
+                    android:text="蜡笔"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/pen4"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/iv_pen4"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_tspen"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/black_80"
+                    android:text="水彩"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/pen5"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/iv_pen5"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_fluorescent"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/black_80"
+                    android:text="荧光"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginBottom="10dp"
+            android:weightSum="4"
+            android:orientation="horizontal"
+            android:background="@color/transparent"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="55dp">
+
+            <LinearLayout
+                android:id="@+id/color"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:src="@mipmap/icon_color"
+                    android:id="@+id/iv_color"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"/>
+
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/black_80"
+                    android:text="颜色"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/eraser"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_eraser"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_eraser"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/black_80"
+                    android:text="橡皮"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/pen"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/iv_pen"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_pencil"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/black_80"
+                    android:text="画笔"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rotate"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/iv_rotate"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_rotate"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
+
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/black_80"
+                    android:text="旋转"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+    <View
+        android:layout_centerInParent="true"
+        android:id="@+id/color_preview"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:id="@+id/head_layout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <SeekBar
+            android:maxHeight="10dp"
+            android:thumb="@mipmap/icon_seek_point"
+            android:background="@mipmap/icon_bg_seekbar"
+            android:max="100"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/seekBar" />
+        <TextView
+            android:gravity="center"
+            android:id="@+id/pen_width"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:textSize="18dp"
+            android:textColor="@color/black_80"
+            android:text="1"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+        <SeekBar
+            android:thumb="@mipmap/icon_seek_point"
+            android:background="@mipmap/icon_bg_seekbar"
+            android:max="100"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/seekBar1" />
+        <TextView
+            android:gravity="center"
+            android:id="@+id/pen_alpha"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:textSize="18dp"
+            android:textColor="@color/black_80"
+            android:text="1"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:visibility="gone"
+        android:layout_above="@+id/bottom"
+        android:background="@color/black_fe"
+        android:id="@+id/wait"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar" />
+    </FrameLayout>
+
+
+</RelativeLayout>
 

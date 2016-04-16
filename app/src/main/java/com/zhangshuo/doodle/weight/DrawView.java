@@ -2,8 +2,12 @@ package com.zhangshuo.doodle.weight;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.EmbossMaskFilter;
+import android.graphics.MaskFilter;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
@@ -11,6 +15,8 @@ import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.zhangshuo.doodle.logic.UIUitl;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,6 +26,7 @@ import java.io.IOException;
  * Created by zhaokai on 2016/04/04.
  */
 public class DrawView extends View {
+    private Context mContext;
     private int view_width = 0;//屏幕宽度
     private int view_height = 0;//屏幕高度
     private float preX;//起始点的X坐标
@@ -28,12 +35,18 @@ public class DrawView extends View {
     public Paint paint = null;
     Bitmap cacheBitmap = null;//定义一个内存中的图片，该图片将作为缓冲区
     Canvas cacheCanvas = null;//定义一个画布
+    private float paintWidth = 1;//画笔宽度
+    private int backColor = Color.WHITE;
+    private int paintColor = Color.BLUE;
+    private Paint bmpPaint ;
+
 
     public DrawView(Context context, AttributeSet attributeSet)//写一个构造方法初始化类
     {
         super(context, attributeSet);
+        this.mContext = context;
         view_width = context.getResources().getDisplayMetrics().widthPixels;//获取屏幕的宽度   /*显示度量标准*宽像素
-        view_height = context.getResources().getDisplayMetrics().heightPixels;//获取屏幕的高度
+        view_height = context.getResources().getDisplayMetrics().widthPixels;
 
         //创建一个与该View相同大小的缓冲区
         cacheBitmap = Bitmap.createBitmap(view_width,view_height, Bitmap.Config.ARGB_8888);
@@ -51,19 +64,19 @@ public class DrawView extends View {
         /**Paint flag that enables dithering when blitting.
          Enabling this flag applies a dither to any blit operation
          where the target's colour space is more constrained than the source.*/
-        paint.setColor(Color.RED);
+        paint.setColor(paintColor);
         //设置画笔风格
         paint.setStyle(Paint.Style.STROKE);//填充轮廓
         paint.setStrokeJoin(Paint.Join.ROUND);//??????????????????????????????????????????
         paint.setStrokeCap(Paint.Cap.BUTT);//?????????????????????????????????
-        paint.setStrokeWidth(8);//设置笔触宽度
+        paint.setStrokeWidth(paintWidth);//设置笔触宽度
         paint.setAntiAlias(true);//设置抗锯齿功能，稍微耗费内存
         paint.setDither(true);//使用抖动效果对手抖动结果进行处理
+        bmpPaint = new Paint();
     }
     @Override
     public void onDraw(Canvas canvas) {//重写绘制方法
-        canvas.drawColor(0xFFFFFFFF);//设置背景色
-        Paint bmpPaint = new Paint();
+        canvas.drawColor(backColor);//设置背景色
         canvas.drawBitmap(cacheBitmap, 0, 0, bmpPaint);//绘制cacheBitmap   //注释掉后画完一笔后不保留绘图
         /**   drawBitmap_API
          bitmap	The bitmap to be drawn
@@ -110,13 +123,13 @@ public class DrawView extends View {
     public void clear()
     {                         // 波特-达夫相交    相交模式       清理
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));//设置图形重叠时的处理方式
-        paint.setColor(Color.WHITE);
-        paint.setStrokeWidth(30);//相交宽度
+        paint.setStrokeWidth(paintWidth);//相交宽度
+//        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
     }
-    /*public void fillClear()
-    {
-           啥时候学会了就把这个洞补起来
-    }*/
+
+    public void clearFull(){
+        cacheCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+    }
     public void save()
     {
         try {
@@ -126,12 +139,18 @@ public class DrawView extends View {
             e.printStackTrace();
         }
     }
+
+    public void setPaintWidth(float paintWidth) {
+        this.paintWidth = UIUitl.dip2px(paintWidth);
+        paint.setStrokeWidth(UIUitl.dip2px(paintWidth));
+    }
+
     public void saveBitmap(String fileName)throws IOException
     {
-       File file = new File("/data/NewFile/"+fileName+".png");//创建文件对象   //如果需要写入SD卡中那么需要添加加权限
-       file.createNewFile();//创建一个新文件
+        File file = new File("/data/NewFile/"+fileName+".png");//创建文件对象   //如果需要写入SD卡中那么需要添加加权限
+        file.createNewFile();//创建一个新文件
         FileOutputStream fileOS = new FileOutputStream(file);
-       //将绘图内容压缩为Png格式输出到输出流的对象中
+        //将绘图内容压缩为Png格式输出到输出流的对象中
         cacheBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOS);
         /**@param format   The format of the compressed image
          * @param quality  Hint to the compressor, 0-100. 0 meaning compress for
@@ -142,5 +161,145 @@ public class DrawView extends View {
          * */
         fileOS.flush();  //将缓冲区中的数据全部写出到输出流中
         fileOS.close();  //关闭文件输出流对象
+    }
+
+    /**
+     * 画布背景色
+     * @param backColor 背景色
+     */
+    public void setBackColor(int backColor) {
+        this.backColor = backColor;
+    }
+
+    /**
+     * 设置画笔颜色
+     * @param paintColor 画笔颜色
+     */
+    public void setPaintColor(int paintColor) {
+        this.paintColor = paintColor;
+        paint.setColor(paintColor);
+    }
+
+    public void rotateImage() {
+        this.cacheBitmap = getRotateBitmap(90, cacheBitmap);
+        cacheCanvas.setBitmap(cacheBitmap);
+        invalidate();
+    }
+
+    public void setCacheBitmap(Bitmap cacheBitmap) {
+        if(cacheBitmap!=null&&!cacheBitmap.isRecycled()){
+            cacheBitmap.recycle();
+            System.gc();
+        }
+        this.cacheBitmap = cacheBitmap;
+        cacheCanvas.setBitmap(cacheBitmap);
+        invalidate();
+    }
+
+
+    /**
+     * 旋转图片
+     * @param angle 旋转角度
+     * @param bitmap 要处理的Bitmap
+     * @return 处理后的Bitmap
+     */
+    public static Bitmap getRotateBitmap(int angle, Bitmap bitmap)
+    {
+        // 旋转图片 动作
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        // 创建新的图片
+        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        if (resizedBitmap != bitmap && !bitmap.isRecycled()){
+            bitmap.recycle();
+            bitmap = null;
+        }
+        return resizedBitmap;
+    }
+
+    /**
+     * 翻转图片
+     */
+    public void ghostImage() {
+        this.cacheBitmap = convertBmp(cacheBitmap,ConvertMode.LEVEL);
+        cacheCanvas.setBitmap(cacheBitmap);
+        invalidate();
+    }
+
+    /**
+     * 图片翻转
+     * @param bmp 原始图片
+     * @param mode 翻转模式
+     * @return 翻转后的图片
+     */
+    public Bitmap convertBmp(Bitmap bmp,ConvertMode mode) {
+        int w = bmp.getWidth();
+        int h = bmp.getHeight();
+
+        Matrix matrix = new Matrix();
+        if(mode == ConvertMode.LEVEL) {
+            matrix.postScale(-1, 1); // 镜像水平翻转
+        } else {
+            matrix.postScale(1, -1);   //镜像垂直翻转
+        }
+        return Bitmap.createBitmap(bmp, 0, 0, w, h, matrix, true);
+    }
+
+    public void setAlpha(int progress) {
+        paint.setAlpha(progress);
+    }
+
+    public enum ConvertMode {
+        VERTICAL,
+        LEVEL,
+    }
+
+    /**
+     * 获取bitmap
+     *
+     * @return 返回当前显示的bitmap
+     */
+    public Bitmap getCacheBitmap() {
+        return cacheBitmap;
+    }
+    /**
+     * * 功能：设置画笔风格
+     * @param mPaintType
+     * @return MaskFilter
+     */
+    public MaskFilter setMaskFilter(int mPaintType){
+        MaskFilter maskFilter = null;
+        paint.setAlpha(100);
+        switch (mPaintType) {
+            case PEN_TYPE.PLAIN_PEN://签字笔风格
+                maskFilter = null;
+                break;
+            case PEN_TYPE.BLUR://铅笔模糊风格
+                maskFilter = new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL);
+                break;
+            case PEN_TYPE.EMBOSS://毛笔浮雕风格
+                maskFilter = new EmbossMaskFilter(new float[] { 1, 1, 1 }, 0.4f, 6, 3.5f);
+                break;
+            case PEN_TYPE.FLUORESCENT://荧光
+                maskFilter =new BlurMaskFilter(UIUitl.dip2px(5f), BlurMaskFilter.Blur.SOLID);
+                break;
+            case PEN_TYPE.TS_PEN://透明水彩风格
+                maskFilter = null;
+                paint.setAlpha(50);
+                break;
+            default:
+                maskFilter = null;
+                break;
+        }
+        paint.setMaskFilter(maskFilter);
+        return maskFilter;
+    }
+    public interface PEN_TYPE{
+        int PLAIN_PEN = 1;
+        int BLUR = 2;
+        int EMBOSS = 3;
+        int TS_PEN = 4;
+        int FLUORESCENT = 5;
     }
 }
