@@ -16,7 +16,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.zhangshuo.doodle.logic.UIUitl;
+import com.zhangshuo.doodle.util.UIUitl;
 
 import java.io.File;
 import java.io.FileOutputStream;

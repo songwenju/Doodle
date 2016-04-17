@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Doodle</string>
-    <string name="title_activity_login">Doodle</string>
+    <string name="title_activity_main">画板</string>
+    <string name="title_activity_login">登录</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -15,4 +16,23 @@
         completions."
     </string>
     <string name="more_color">更多</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="splash_text">动动手指，开启玩乐生活</string>
+    <string name="input_login_title">登录</string>
+    <string name="input_register_title">注册</string>
+    <string name="email">邮箱:</string>
+    <string name="email_hint">帮助您找回密码</string>
+    <string name="pwd">密码:</string>
+    <string name="pwd_hint">4～20位字母，下划线或数字</string>
+    <string name="name">昵称:</string>
+    <string name="name_hint">3～10位字母，下划线或数字</string>
+
+    <!--登录-->
+    <string name="user">用户:</string>
+    <string name="user_hint">用户名或邮箱</string>
+
+
+    <string name="cancel">取消</string>
+    <string name="confirm">确定</string>
 </resources>

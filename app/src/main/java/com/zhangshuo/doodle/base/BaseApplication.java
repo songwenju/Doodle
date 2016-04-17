@@ -9,10 +9,9 @@ import android.os.Handler;
  *
  */
 public class BaseApplication extends Application {
-
-    private static Context mAppContext;
-    private static BaseApplication application = new BaseApplication();
-    private static Handler mainHandler;
+    public static Context mAppContext;
+    public static BaseApplication application = new BaseApplication();
+    public static Handler mainHandler;
 
     public BaseApplication(){
         super();

@@ -1,31 +1,26 @@
 package com.zhangshuo.doodle.ui;
 
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zhangshuo.doodle.R;
-import com.zhangshuo.doodle.base.BaseApplication;
-import com.zhangshuo.doodle.logic.FileUtils;
-import com.zhangshuo.doodle.logic.UIUitl;
+import com.zhangshuo.doodle.util.FileUtils;
+import com.zhangshuo.doodle.util.UIUitl;
 import com.zhangshuo.doodle.weight.ColorPickerDialog;
 import com.zhangshuo.doodle.weight.DrawView;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
