@@ -1,6 +1,13 @@
 package com.zhangshuo.doodle.ui;
 
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -31,6 +39,13 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private final static String Tag = MainActivity.class.getSimpleName();
+//    Android相册中获取图片和路径
+
+    private final String IMAGE_TYPE = "image/*";
+
+    private final int IMAGE_CODE = 10086;   //这里的IMAGE_CODE是自己任意定义的
 
     private static int[] colors = new int[]{
             R.color.user_icon_1,R.color.user_icon_2,R.color.user_icon_3,R.color.user_icon_4,
@@ -55,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout penLayout;
     private View wait;
     private SeekBar penAlpth;
+    private Bitmap bm = null;
+    private FrameLayout drawLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,11 +158,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView() {
         //画布
         drawView = (DrawView)findViewById(R.id.drawActivity);
+        drawLayout = (FrameLayout)findViewById(R.id.draw_layout);
         assert drawView != null;
-        FrameLayout.LayoutParams params = ((FrameLayout.LayoutParams) drawView.getLayoutParams());
+        // 设置画布大小 与屏幕一样大 且为方形
+        RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams) drawLayout.getLayoutParams());
         params.height = UIUitl.getWindowWidth();
         params.width = UIUitl.getWindowWidth();
-        drawView.setLayoutParams(params);
+        drawLayout.setLayoutParams(params);
         /**
          * 底部按钮
          */
@@ -228,9 +247,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             //导入图片
             case R.id.insert:
-
-                Toast.makeText(this,"导入图片",Toast.LENGTH_SHORT).show();
-
+                //开启系统相册选择界面
+                Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
+                getAlbum.setType(IMAGE_TYPE);
+                startActivityForResult(getAlbum, IMAGE_CODE);
                 break;
             //分享
             case R.id.share:
@@ -244,6 +264,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode != RESULT_OK) {        //此处的 RESULT_OK 是系统自定义得一个常量
+
+            Log.e(Tag,"ActivityResult resultCode error");
+
+            return;
+
+        }
+
+        //外界的程序访问ContentProvider所提供数据 可以通过ContentResolver接口
+
+        ContentResolver resolver = getContentResolver();
+
+        //此处的用于判断接收的Activity是不是你想要的那个
+
+        if (requestCode == IMAGE_CODE) {
+
+            try {
+
+                Uri selectedImage = data.getData();
+                String picturePath = selectedImage.getPath();
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+                Cursor cursor = getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                if (null !=cursor) {
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    picturePath = cursor.getString(columnIndex);
+                    cursor.close();
+                } else {
+                    picturePath = selectedImage.getPath();
+                }
+                Log.d(Tag,"picturePath = "+picturePath);
+                bm = UIUitl.getSampledBitmap(picturePath,UIUitl.getWindowWidth(),UIUitl.getWindowWidth());
+//
+                drawView.setCacheBitmap(bm);
+//                super.onActivityResult(requestCode, resultCode, data);
+            }catch (Exception e){
+                Log.e(Tag,"从相册获取图片失败 : Exception "+e);
+            }
+        }
     }
 
     /**

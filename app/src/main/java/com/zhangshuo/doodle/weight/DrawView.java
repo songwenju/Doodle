@@ -45,11 +45,8 @@ public class DrawView extends View {
     {
         super(context, attributeSet);
         this.mContext = context;
-        view_width = context.getResources().getDisplayMetrics().widthPixels;//获取屏幕的宽度   /*显示度量标准*宽像素
-        view_height = context.getResources().getDisplayMetrics().widthPixels;
 
-        //创建一个与该View相同大小的缓冲区
-        cacheBitmap = Bitmap.createBitmap(view_width,view_height, Bitmap.Config.ARGB_8888);
+        cacheCanvas = new Canvas();
         /***
          * Bitmap.Config 	ALPHA_8 	Each pixel is stored as a single translucency (alpha) channel.
          Bitmap.Config 	ARGB_4444 	This field was deprecated in API level 13. Because of the poor quality of this configuration, it is advised to use ARGB_8888 instead.
@@ -57,9 +54,13 @@ public class DrawView extends View {
          Bitmap.Config 	RGB_565 	Each pixel is stored on 2 bytes and only the RGB channels are encoded: red is stored with 5 bits of precision (32 possible values), green is stored with 6 bits of precision (64 possible values) and blue is stored with 5 bits of precision.
          可以参考  http://blog.csdn.net/wulongtiantang/article/details/8481077
          */
-        cacheCanvas = new Canvas();
+        view_width = context.getResources().getDisplayMetrics().widthPixels;//获取屏幕的宽度   /*显示度量标准*宽像素
+        view_height = context.getResources().getDisplayMetrics().widthPixels;
+        //创建一个与该View相同大小的缓冲区
+        cacheBitmap = Bitmap.createBitmap(view_width, view_height, Bitmap.Config.ARGB_8888);
+        cacheCanvas.setBitmap(cacheBitmap);
         path = new Path();
-        cacheCanvas.setBitmap(cacheBitmap);//在cache的上边绘制cacheBitmap
+//        cacheCanvas.setBitmap(cacheBitmap);//在cache的上边绘制cacheBitmap
         paint = new Paint(Paint.DITHER_FLAG);//抗抖动
         /**Paint flag that enables dithering when blitting.
          Enabling this flag applies a dither to any blit operation
@@ -74,6 +75,23 @@ public class DrawView extends View {
         paint.setDither(true);//使用抖动效果对手抖动结果进行处理
         bmpPaint = new Paint();
     }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//            view_width = getMeasuredWidth();//context.getResources().getDisplayMetrics().widthPixels;//获取屏幕的宽度   /*显示度量标准*宽像素
+//            view_height = getMeasuredHeight();//context.getResources().getDisplayMetrics().widthPixels;
+//            //创建一个与该View相同大小的缓冲区
+//            cacheBitmap = Bitmap.createBitmap(view_width, view_height, Bitmap.Config.ARGB_8888);
+//            cacheCanvas.setBitmap(cacheBitmap);
+    }
+
+    //此时 view 已经测量完成
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+    }
+
     @Override
     public void onDraw(Canvas canvas) {//重写绘制方法
         canvas.drawColor(backColor);//设置背景色
@@ -130,15 +148,6 @@ public class DrawView extends View {
     public void clearFull(){
         cacheCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
     }
-    public void save()
-    {
-        try {
-            saveBitmap("myPicture");
-        }catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
 
     public void setPaintWidth(float paintWidth) {
         this.paintWidth = UIUitl.dip2px(paintWidth);
@@ -187,12 +196,15 @@ public class DrawView extends View {
     }
 
     public void setCacheBitmap(Bitmap cacheBitmap) {
-        if(cacheBitmap!=null&&!cacheBitmap.isRecycled()){
-            cacheBitmap.recycle();
-            System.gc();
-        }
+//        if(this.cacheBitmap!=null&&!this.cacheBitmap.isRecycled()){
+//            this.cacheBitmap.recycle();
+//            System.gc();
+//        }
         this.cacheBitmap = cacheBitmap;
-        cacheCanvas.setBitmap(cacheBitmap);
+//        cacheCanvas.drawBitmap(cacheBitmap,new Matrix(),bmpPaint);
+        cacheCanvas.setBitmap(this.cacheBitmap);
+        ghostImage();
+        ghostImage();
         invalidate();
     }
 
