@@ -5,6 +5,6 @@ package com.zhangshuo.doodle.common;
  * 邮箱： songwenju@outlook.com
  */
 public class AppConstant {
-    public static final String remoteLoginPath = "http://192.168.0.100:8080/DoodleServer/LoginServlet";
+    public static final String remoteLoginPath = "http://192.168.0.104/DoodleServer/loginServlet";
 
 }
