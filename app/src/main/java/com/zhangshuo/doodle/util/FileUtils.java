@@ -1,4 +1,4 @@
-package com.zhangshuo.doodle.logic;
+package com.zhangshuo.doodle.util;
 
 import android.content.ContentResolver;
 import android.database.Cursor;

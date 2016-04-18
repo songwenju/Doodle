@@ -18,7 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.zhangshuo.doodle.R;
-import com.zhangshuo.doodle.logic.UIUitl;
+import com.zhangshuo.doodle.util.UIUitl;
 
 /**
  * Created by zhaokai on 16/4/9.
