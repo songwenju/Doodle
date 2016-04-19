@@ -1,6 +1,7 @@
 package com.zhangshuo.doodle.ui;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -13,14 +14,13 @@ import android.widget.TextView;
 import com.zhangshuo.doodle.R;
 import com.zhangshuo.doodle.base.BaseActivity;
 import com.zhangshuo.doodle.util.LogUtil;
-import com.zhangshuo.doodle.util.NetUtil;
+import com.zhangshuo.doodle.util.uerLoginRegUtil;
 import com.zhangshuo.doodle.util.StatusBarUtils;
 
 /**
  * 欢迎页面
  */
 public class SplashActivity extends BaseActivity {
-
     private TextView mSplashTitle;
     private Button mLogin;
     private Button mRegister;
@@ -87,27 +87,32 @@ public class SplashActivity extends BaseActivity {
                 } else if (!CommonUtil.isCorrectPwd(pwdStr)) {
                     toast("密码的格式不正确！");
                 } else {
-                    new AsyncTask<String,Boolean,Boolean>(){
+                    new AsyncTask<String,Void,String>(){
                         @Override
                         protected void onPreExecute() {
                             super.onPreExecute();
                         }
 
                         @Override
-                        protected void onPostExecute(Boolean aBoolean) {
-                            super.onPostExecute(aBoolean);
-                            if (aBoolean){
+                        protected void onPostExecute(String result) {
+                            super.onPostExecute(result);
+                            if ("1".equals(result)){
                                 mLoginDialog.dismiss();
                                 toast("登录成功！");
-                            }else {
+                                Intent intent = new Intent(mContext,MainActivity.class);
+                                mContext.startActivity(intent);
+                                SplashActivity.this.finish();
+                            }else if("0".equals(result)){
                                 //验证失败
-                                toast("用户不存在或密码不对！");
+                                toast("用户不存在！");
+                            }else if ("2".equals(result)){
+                                toast("密码错误！");
                             }
                         }
                         @Override
-                        protected Boolean doInBackground(String... params) {
+                        protected String doInBackground(String... params) {
                             LogUtil.i("swj","userStr:"+params[0]+ " pwdStr:"+params[1]);
-                            return NetUtil.loginCheck(params[0], params[1]);
+                            return uerLoginRegUtil.getLoginStatus(params[0], params[1]);
                         }
                     }.execute(userStr, pwdStr);
 
