@@ -2,6 +2,7 @@ package com.zhangshuo.doodle.ui;
 
 import android.app.AlertDialog;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -11,12 +12,14 @@ import android.widget.TextView;
 
 import com.zhangshuo.doodle.R;
 import com.zhangshuo.doodle.base.BaseActivity;
+import com.zhangshuo.doodle.util.LogUtil;
+import com.zhangshuo.doodle.util.NetUtil;
 import com.zhangshuo.doodle.util.StatusBarUtils;
 
 /**
  * 欢迎页面
  */
-public class SplashActivity extends BaseActivity{
+public class SplashActivity extends BaseActivity {
 
     private TextView mSplashTitle;
     private Button mLogin;
@@ -59,7 +62,7 @@ public class SplashActivity extends BaseActivity{
         //初始化控件
         final EditText user = (EditText) dialogView.findViewById(R.id.et_user);
         final EditText pwd = (EditText) dialogView.findViewById(R.id.et_pwd);
-        LinearLayout forget_pwd =  (LinearLayout) dialogView.findViewById(R.id.forget_pwd);
+        LinearLayout forget_pwd = (LinearLayout) dialogView.findViewById(R.id.forget_pwd);
         Button cancelBtn = (Button) dialogView.findViewById(R.id.btn_cancel);
         Button confirmBtn = (Button) dialogView.findViewById(R.id.btn_confirm);
 
@@ -84,9 +87,30 @@ public class SplashActivity extends BaseActivity{
                 } else if (!CommonUtil.isCorrectPwd(pwdStr)) {
                     toast("密码的格式不正确！");
                 } else {
-                    toast("请求服务器，验证用户信息是否正确");
+                    new AsyncTask<String,Boolean,Boolean>(){
+                        @Override
+                        protected void onPreExecute() {
+                            super.onPreExecute();
+                        }
 
-                    mLoginDialog.dismiss();
+                        @Override
+                        protected void onPostExecute(Boolean aBoolean) {
+                            super.onPostExecute(aBoolean);
+                            if (aBoolean){
+                                mLoginDialog.dismiss();
+                                toast("登录成功！");
+                            }else {
+                                //验证失败
+                                toast("用户不存在或密码不对！");
+                            }
+                        }
+                        @Override
+                        protected Boolean doInBackground(String... params) {
+                            LogUtil.i("swj","userStr:"+params[0]+ " pwdStr:"+params[1]);
+                            return NetUtil.loginCheck(params[0], params[1]);
+                        }
+                    }.execute(userStr, pwdStr);
+
                 }
             }
         });
@@ -125,8 +149,8 @@ public class SplashActivity extends BaseActivity{
                 } else if (TextUtils.isEmpty(pwdStr)) {
                     toast("密码不能为空！");
                 } else if (!CommonUtil.isCorrectPwd(pwdStr)) {
-                    toast("密码的格式不正确！"); }
-                else if (TextUtils.isEmpty(nameStr)) {
+                    toast("密码的格式不正确！");
+                } else if (TextUtils.isEmpty(nameStr)) {
                     toast("昵称不能为空！");
                 } else if (!CommonUtil.isCorrectName(nameStr)) {
                     toast("昵称的格式不正确！");
@@ -164,7 +188,7 @@ public class SplashActivity extends BaseActivity{
 
     @Override
     protected void processClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.login:
                 mLoginDialog.show();
                 break;
