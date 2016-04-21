@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="300dp"
+             android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/common_title"
+            android:text="@string/check_code_title"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="@string/check_code_remain"
+            android:textSize="16dp"/>
+
+        <LinearLayout style="@style/edit_wrap_style">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="@string/user_email"
+                android:textSize="20sp"/>
+
+            <EditText
+                android:id="@+id/et_email"
+                style="@style/edit_style"
+                android:hint="@string/user_email_hint"
+                android:inputType="textEmailAddress"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <LinearLayout style="@style/edit_wrap_style">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/check_code"
+                android:textSize="20sp"/>
+
+            <EditText
+                android:id="@+id/et_code"
+                style="@style/edit_style"
+                android:hint="@string/check_code_hint"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <include layout ="@layout/dialog_bottom"/>
+    </LinearLayout>
+
+    <include layout ="@layout/dialog_progress_bar"/>
+</FrameLayout>

@@ -24,4 +24,5 @@
     <item android:id="@+id/insert" android:title="导入"/>
     <item android:id="@+id/save" android:title="保存"/>
     <item android:id="@+id/share" android:title="分享"/>
+    <item android:id="@+id/exit_login" android:title="退出登录"/>
 </menu>

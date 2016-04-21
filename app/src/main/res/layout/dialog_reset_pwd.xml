@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="300dp"
+             android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/common_title"
+            android:text="@string/reset_pwd_title"/>
+
+        <LinearLayout
+            style="@style/edit_wrap_style"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reset_pwd"
+                android:textSize="18sp"/>
+
+            <EditText
+                android:id="@+id/et_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/reset_pwd_hint"
+                android:inputType="textPassword"
+                android:textColor="@color/dialog_text_color"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/edit_wrap_style"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reset_pwd_again"
+                android:textSize="18sp"/>
+
+            <EditText
+                android:id="@+id/et_pwd_again"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/reset_pwd_again_hint"
+                android:inputType="textPassword"
+                android:textColor="@color/dialog_text_color"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <include layout="@layout/dialog_bottom"/>
+    </LinearLayout>
+
+    <include layout="@layout/dialog_progress_bar"/>
+</FrameLayout>

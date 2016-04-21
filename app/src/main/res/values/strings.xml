@@ -16,21 +16,43 @@
         completions."
     </string>
     <string name="more_color">更多</string>
-    <string name="login">登录</string>
-    <string name="register">注册</string>
     <string name="splash_text">动动手指，开启玩乐生活</string>
     <string name="input_login_title">登录</string>
     <string name="input_register_title">注册</string>
-    <string name="email">邮箱:</string>
+    <string name="input_reset_pwd">重置密码</string>
+    <!--注册-->
+    <string name="register">注册</string>
+    <string name="email">注册邮箱:</string>
     <string name="email_hint">帮助您找回密码</string>
-    <string name="pwd">密码:</string>
+    <string name="pwd">注册密码:</string>
+    <string name="pwd_again">再次输入:</string>
     <string name="pwd_hint">4～20位字母，下划线或数字</string>
-    <string name="name">昵称:</string>
+    <string name="name">用户昵称:</string>
     <string name="name_hint">3～10位字母，下划线或数字</string>
 
     <!--登录-->
+    <string name="login">登录</string>
     <string name="user">用户:</string>
+    <string name="login_pwd">密码:</string>
     <string name="user_hint">用户名或邮箱</string>
+
+    <!--重置密码-->
+    <string name="user_email">邮箱:</string>
+    <string name="user_email_hint">请输入注册的邮箱</string>
+    <string name="get_check_code">获取校验码</string>
+
+    <!--验证邮箱-->
+    <string name="check_code_title">验证邮箱</string>
+    <string name="check_code">校验码:</string>
+    <string name="check_code_hint">请输入邮箱校验码</string>
+    <string name="check_code_remain">请去邮箱查收校验码</string>
+
+    <!--重置密码-->
+    <string name="reset_pwd_title">重置密码</string>
+    <string name="reset_pwd">输入密码:</string>
+    <string name="reset_pwd_hint">请输入新密码</string>
+    <string name="reset_pwd_again">再次输入:</string>
+    <string name="reset_pwd_again_hint">请再次输入新密码</string>
 
 
     <string name="cancel">取消</string>
