@@ -20,13 +20,12 @@
     <color name="user_icon_8">#ffff5722</color><!-- deep orange 500 -->
     <color name="color_default">#ff9e9e9e</color>
     <color name="white">#FFFFFF</color>
-<<<<<<< HEAD
+
     <color name="black_96">#969696</color>
     <color name="blue_33">#330000ff</color>
-=======
 
     <color name="dialog_text_color">#333333</color>
     <color name="black">#000000</color>
->>>>>>> upstream/master
+
     <!-- gray 500 -->
 </resources>

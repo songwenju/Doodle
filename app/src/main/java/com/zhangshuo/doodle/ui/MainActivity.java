@@ -1,23 +1,15 @@
 package com.zhangshuo.doodle.ui;
 
-<<<<<<< HEAD
+
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-=======
-import android.content.DialogInterface;
-import android.content.Intent;
->>>>>>> upstream/master
 import android.graphics.Color;
-<<<<<<< HEAD
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
-=======
->>>>>>> upstream/master
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -28,11 +20,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-<<<<<<< HEAD
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-=======
->>>>>>> upstream/master
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -81,12 +69,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout penLayout;
     private View wait;
     private SeekBar penAlpth;
-<<<<<<< HEAD
+
     private Bitmap bm = null;
     private FrameLayout drawLayout;
-=======
+
     private AlertDialog mExistDialog;
->>>>>>> upstream/master
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,12 +158,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
         //画布
-<<<<<<< HEAD
         drawView = (DrawView)findViewById(R.id.drawActivity);
         drawLayout = (FrameLayout)findViewById(R.id.draw_layout);
-=======
         drawView = (DrawView) findViewById(R.id.drawActivity);
->>>>>>> upstream/master
         assert drawView != null;
         // 设置画布大小 与屏幕一样大 且为方形
         RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams) drawLayout.getLayoutParams());
@@ -286,16 +270,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             //导入图片
             case R.id.insert:
-<<<<<<< HEAD
+
                 //开启系统相册选择界面
                 Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
                 getAlbum.setType(IMAGE_TYPE);
                 startActivityForResult(getAlbum, IMAGE_CODE);
-=======
 
                 Toast.makeText(this, "导入图片", Toast.LENGTH_SHORT).show();
 
->>>>>>> upstream/master
                 break;
             //分享
             case R.id.share:
