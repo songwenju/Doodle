@@ -1,109 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="300dp"
-              android:layout_height="wrap_content"
-              android:orientation="vertical">
-
-    <TextView
-        style="@style/common_title"
-        android:text="@string/input_login_title"/>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="300dp"
+             android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <TextView
+            style="@style/common_title"
+            android:text="@string/input_login_title"/>
+
+        <LinearLayout
+            style="@style/edit_wrap_style"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                style="@style/edit_title_style"
+                android:text="@string/user"
+                android:textSize="20sp"/>
+
+            <EditText
+                android:id="@+id/et_user"
+                style="@style/edit_style"
+                android:textSize="16sp"
+                android:hint="@string/user_hint"/>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/edit_wrap_style">
+
+            <TextView
+                style="@style/edit_title_style"
+                android:text="@string/login_pwd"
+                android:textSize="20sp"/>
+
+            <EditText
+                android:id="@+id/et_pwd"
+                android:textSize="16sp"
+                style="@style/edit_style"
+                android:hint="@string/pwd_hint"
+                android:inputType="textPassword"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/forget_pwd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/user"
-            android:textSize="20sp"/>
+            android:layout_gravity="end"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_user"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/user_hint"
-            android:inputType="textEmailAddress"
-            android:textColor="@color/dialog_text_color"
-            android:textSize="16sp"/>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/login_question"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:text="忘记密码"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <include layout ="@layout/dialog_bottom"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pwd"
-            android:textSize="20sp"/>
-
-        <EditText
-            android:id="@+id/et_pwd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/pwd_hint"
-            android:inputType="textPassword"
-            android:textColor="@color/dialog_text_color"
-            android:textSize="16sp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/forget_pwd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:clickable="true"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@mipmap/login_question"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:text="忘记密码"
-            android:textSize="16sp"/>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_cancel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/cancel"
-            android:textColor="@color/black"/>
-
-        <Button
-            android:id="@+id/btn_confirm"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/confirm"
-            android:textColor="@color/black"/>
-    </LinearLayout>
-</LinearLayout>
+    <include layout ="@layout/dialog_progress_bar"/>
+</FrameLayout>

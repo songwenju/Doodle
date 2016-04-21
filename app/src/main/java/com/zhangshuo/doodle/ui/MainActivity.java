@@ -1,10 +1,15 @@
 package com.zhangshuo.doodle.ui;
 
+<<<<<<< HEAD
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+=======
+import android.content.DialogInterface;
+import android.content.Intent;
+>>>>>>> upstream/master
 import android.graphics.Color;
 <<<<<<< HEAD
 import android.net.Uri;
@@ -13,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 =======
 >>>>>>> upstream/master
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -32,7 +38,9 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.zhangshuo.doodle.R;
+import com.zhangshuo.doodle.common.AppConstant;
 import com.zhangshuo.doodle.util.FileUtils;
+import com.zhangshuo.doodle.util.SpUtil;
 import com.zhangshuo.doodle.util.UIUitl;
 import com.zhangshuo.doodle.weight.ColorPickerDialog;
 import com.zhangshuo.doodle.weight.DrawView;
@@ -51,30 +59,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final int IMAGE_CODE = 10086;   //这里的IMAGE_CODE是自己任意定义的
 
     private static int[] colors = new int[]{
-            R.color.user_icon_1,R.color.user_icon_2,R.color.user_icon_3,R.color.user_icon_4,
-            R.color.user_icon_4,R.color.user_icon_6,R.color.user_icon_7,R.color.user_icon_8,
+            R.color.user_icon_1, R.color.user_icon_2, R.color.user_icon_3, R.color.user_icon_4,
+            R.color.user_icon_4, R.color.user_icon_6, R.color.user_icon_7, R.color.user_icon_8,
     };
     private DrawView drawView;
     private ScrollView colorLayout;
     private LinearLayout pen;
     private LinearLayout penColor;
     private LinearLayout penEraser;
-    private SeekBar      penWidth;
+    private SeekBar penWidth;
     private LinearLayout penRotate;
 
     private ImageView iv_pen;
     private ImageView iv_eraser;
     private ImageView iv_color;
     private LinearLayout bottom;
-//    private TextView tv_penWidth;
+    //    private TextView tv_penWidth;
     private LinearLayout eraserLayout;
     private LinearLayout rotateLayout;
     private ImageView iv_rotate;
     private LinearLayout penLayout;
     private View wait;
     private SeekBar penAlpth;
+<<<<<<< HEAD
     private Bitmap bm = null;
     private FrameLayout drawLayout;
+=======
+    private AlertDialog mExistDialog;
+>>>>>>> upstream/master
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +97,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initEvent();
     }
 
-    @SuppressWarnings("ConstantConditions")
     private void initEvent() {
         penAlpth.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(progress<1)
+                if (progress < 1)
                     progress = 1;
                 drawView.setAlpha(progress);
             }
@@ -139,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.rotate1).setOnClickListener(this);
         findViewById(R.id.rotate2).setOnClickListener(this);
         //颜色选择区点击事件
-        if(colorLayout!=null) {
+        if (colorLayout != null) {
             findViewById(R.id.color_more).setOnClickListener(this);
             findViewById(R.id.color_1).setOnClickListener(this);
             findViewById(R.id.color_2).setOnClickListener(this);
@@ -160,8 +171,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
         //画布
+<<<<<<< HEAD
         drawView = (DrawView)findViewById(R.id.drawActivity);
         drawLayout = (FrameLayout)findViewById(R.id.draw_layout);
+=======
+        drawView = (DrawView) findViewById(R.id.drawActivity);
+>>>>>>> upstream/master
         assert drawView != null;
         // 设置画布大小 与屏幕一样大 且为方形
         RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams) drawLayout.getLayoutParams());
@@ -179,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //旋转面板
         rotateLayout = ((LinearLayout) findViewById(R.id.rotate_layout));
         //画笔面板
-        penLayout = (LinearLayout)findViewById(R.id.pen_layout);
+        penLayout = (LinearLayout) findViewById(R.id.pen_layout);
         //画笔
         pen = ((LinearLayout) findViewById(R.id.pen));
         iv_pen = ((ImageView) findViewById(R.id.iv_pen));//画笔图标
@@ -191,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         iv_color = ((ImageView) findViewById(R.id.iv_color));//颜色图标
         //旋转
         penRotate = ((LinearLayout) findViewById(R.id.rotate));
-        iv_rotate= (ImageView)findViewById(R.id.iv_rotate);
+        iv_rotate = (ImageView) findViewById(R.id.iv_rotate);
         //画笔宽度
         penWidth = ((SeekBar) findViewById(R.id.seekBar));
         //画笔透明度
@@ -200,7 +215,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        tv_penWidth = ((TextView) findViewById(R.id.pen_width));
 
         wait = findViewById(R.id.wait);
+        initExistDialog();
+    }
 
+    /**
+     * 初始化退出的dialog
+     */
+    private void initExistDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("退出登录");
+        builder.setMessage("是否确认退出登录？");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SpUtil.putString(AppConstant.LOGIN_USER, "");
+                Intent intent = new Intent(MainActivity.this, SplashActivity.class);
+                startActivity(intent);
+                MainActivity.this.finish();
+            }
+        });
+        builder.setNegativeButton("取消", null);
+        mExistDialog = builder.create();
     }
 
     //创建菜单
@@ -210,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         inflator.inflate(R.menu.tools, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     //重写菜单方法
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -250,19 +286,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             //导入图片
             case R.id.insert:
+<<<<<<< HEAD
                 //开启系统相册选择界面
                 Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
                 getAlbum.setType(IMAGE_TYPE);
                 startActivityForResult(getAlbum, IMAGE_CODE);
+=======
+
+                Toast.makeText(this, "导入图片", Toast.LENGTH_SHORT).show();
+
+>>>>>>> upstream/master
                 break;
             //分享
             case R.id.share:
                 sharePic();
                 break;
+            case R.id.exit_login:
+                existLogin();
+                break;
             /**
              * 保存图片
              */
-            case  R.id.save:
+            case R.id.save:
                 savePic();
                 break;
         }
@@ -317,6 +362,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
+     * 退出登录
+     */
+    private void existLogin() {
+
+        mExistDialog.show();
+    }
+
+    /**
      * 保存图片
      */
     private void savePic() {
@@ -325,12 +378,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss", Locale.CHINA);
-                final String f = FileUtils.saveBitmap(drawView.getCacheBitmap(),format.format(new Date()));
+                final String f = FileUtils.saveBitmap(drawView.getCacheBitmap(), format.format(new Date()));
                 UIUitl.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         wait.setVisibility(View.GONE);
-                        Toast.makeText(MainActivity.this,f,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, f, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -343,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void sharePic() {
 
-        Toast.makeText(this,"分享",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "分享", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -362,6 +415,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * 设置画笔颜色
+     *
      * @param color 颜色值
      */
     private void setPaintColor(int color) {
@@ -375,9 +429,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         colorLayout.setVisibility(View.GONE);
         eraserLayout.setVisibility(View.GONE);
         penLayout.setVisibility(View.GONE);
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.pen:
-                if(View.VISIBLE == rotateLayout.getVisibility())
+                if (View.VISIBLE == rotateLayout.getVisibility())
                     rotateLayout.setVisibility(View.GONE);
                 iv_pen.setBackgroundResource(R.mipmap.icon_bg_pen);
                 iv_eraser.setBackgroundResource(R.mipmap.icon_bg_default);
@@ -411,7 +465,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.eraser:
-                if(View.VISIBLE == rotateLayout.getVisibility())
+                if (View.VISIBLE == rotateLayout.getVisibility())
                     rotateLayout.setVisibility(View.GONE);
                 iv_rotate.setBackgroundResource(R.mipmap.icon_bg_default);
                 iv_eraser.setBackgroundResource(R.mipmap.icon_bg_eraser);
@@ -429,12 +483,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.rotate:
-                if(View.VISIBLE!=rotateLayout.getVisibility()) {
+                if (View.VISIBLE != rotateLayout.getVisibility()) {
                     iv_rotate.setBackgroundResource(R.mipmap.icon_bg_rotate);
                     iv_eraser.setBackgroundResource(R.mipmap.icon_bg_default);
                     iv_pen.setBackgroundResource(R.mipmap.icon_bg_default);
                     rotateLayout.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     iv_pen.setBackgroundResource(R.mipmap.icon_bg_pen);
                     iv_eraser.setBackgroundResource(R.mipmap.icon_bg_default);
                     iv_rotate.setBackgroundResource(R.mipmap.icon_bg_default);
@@ -450,16 +504,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 rotateImage();
                 break;
             case R.id.color:
-                if(View.VISIBLE == rotateLayout.getVisibility())
+                if (View.VISIBLE == rotateLayout.getVisibility())
                     rotateLayout.setVisibility(View.GONE);
                 colorLayout.setVisibility(View.VISIBLE);
                 break;
             case R.id.drawActivity:
-                Log.e("hide ","click");
+                Log.e("hide ", "click");
                 hideMenu();
                 break;
             default:
-                Log.e("hide ","default");
+                Log.e("hide ", "default");
                 setColor(v);
                 break;
         }
@@ -470,7 +524,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void rotateImage() {
         drawView.rotateImage();
-        Log.e("MainActivity ","rotateImage");
+        Log.e("MainActivity ", "rotateImage");
     }
 
     /**
@@ -478,15 +532,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void ghostImage() {
         drawView.ghostImage();
-        Log.e("MainActivity","gostImage");
+        Log.e("MainActivity", "gostImage");
     }
 
     /**
      * 获取颜色面板的点击事件
+     *
      * @param v 被点击的颜色
      */
     private void setColor(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.color_1:
                 setPaintColor(getResources().getColor(R.color.user_icon_1));
                 break;
@@ -521,13 +576,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 隐藏菜单
      */
     private void hideMenu() {
-        Log.d("hideMenu","hideMenu = "+bottom.getVisibility());
-        if(View.VISIBLE ==bottom.getVisibility()) {
-            Log.d("hideMenu","true");
+        Log.d("hideMenu", "hideMenu = " + bottom.getVisibility());
+        if (View.VISIBLE == bottom.getVisibility()) {
+            Log.d("hideMenu", "true");
             bottom.setVisibility(View.GONE);
             penWidth.setVisibility(View.INVISIBLE);
-        }else {
-            Log.d("hideMenu","false");
+        } else {
+            Log.d("hideMenu", "false");
             bottom.setVisibility(View.VISIBLE);
             penWidth.setVisibility(View.VISIBLE);
         }
