@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/linearLayout_1"
-    android:background="@color/white"
+    android:background="@color/blue_33"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <FrameLayout
-        android:layout_above="@+id/bottom"
+        android:background="@android:color/black"
+        android:id="@+id/draw_layout"
         android:layout_below="@+id/head_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <com.zhangshuo.doodle.weight.DrawView
             android:id="@+id/drawActivity"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="wrap_content" />
     </FrameLayout>
+
+    <View
+        android:layout_below="@+id/draw_layout"
+        android:background="@android:color/black"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
 
     <LinearLayout
         android:orientation="vertical"
@@ -194,8 +202,6 @@
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
-
-
 
             <LinearLayout
                 android:id="@+id/pen3"
@@ -397,6 +403,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/seekBar" />
         <TextView
+            android:visibility="invisible"
             android:gravity="center"
             android:id="@+id/pen_width"
             android:layout_marginLeft="2dp"
@@ -409,12 +416,13 @@
         <SeekBar
             android:thumb="@mipmap/icon_seek_point"
             android:background="@mipmap/icon_bg_seekbar"
-            android:max="100"
+            android:max="255"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/seekBar1" />
         <TextView
+            android:visibility="gone"
             android:gravity="center"
             android:id="@+id/pen_alpha"
             android:layout_marginLeft="5dp"

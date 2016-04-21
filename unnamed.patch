@@ -1,0 +1,8 @@
+Index: app/src/main/java/com/zhangshuo/doodle/weight/DrawView.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/zhangshuo/doodle/weight/DrawView.java	(date 1460204389000)
++++ app/src/main/java/com/zhangshuo/doodle/weight/DrawView.java	(revision )
+@@ -1,0 +1,0 @@
