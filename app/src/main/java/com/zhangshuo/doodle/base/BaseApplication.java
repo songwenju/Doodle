@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 
+import com.umeng.socialize.UMShareAPI;
+
 /**
  * Created by zhaokai on 16/4/9.
  *
@@ -12,6 +14,7 @@ public class BaseApplication extends Application {
     public static Context mAppContext;
     public static BaseApplication application = new BaseApplication();
     public static Handler mainHandler;
+    private UMShareAPI mUmShareAPI;
 
     public BaseApplication(){
         super();
@@ -23,6 +26,9 @@ public class BaseApplication extends Application {
         //初始化全局Application
         mAppContext = this;
         mainHandler = new Handler();
+
+        mUmShareAPI = UMShareAPI.get(this);
+
     }
 
     public static Context getAppContext() {
