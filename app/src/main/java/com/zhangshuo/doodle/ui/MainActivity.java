@@ -84,10 +84,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         //微信 appid appsecret
         PlatformConfig.setWeixin("wxa4489632bd8d69fd", "e4f7157924665f6ed032e1dad30de61f");
-        //新浪微博 appkey appsecret
-        PlatformConfig.setSinaWeibo("3202226085", "239044359a1554835f516c7908bbf56e");
         // QQ和Qzone appid appkey
-        PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
+        //PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
+        //还在审核的key
+        PlatformConfig.setQQZone("1105294409", "qrqgmMU8Ez7DnQ4I");
         initView();
         initEvent();
     }
@@ -396,8 +396,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void sharePic() {
         final SHARE_MEDIA[] displaylist = new SHARE_MEDIA[]{
-                SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.SINA,
-                SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.DOUBAN
+                SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE,
+                SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE,
         };
         savePic();
         UMImage image;
