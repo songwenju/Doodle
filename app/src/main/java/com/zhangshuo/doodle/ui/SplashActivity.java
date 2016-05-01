@@ -486,7 +486,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void enterMainActivity() {
-        if (!TextUtils.isEmpty(SpUtil.getString(AppConstant.LOGIN_USER,""))){
+        if (!TextUtils.isEmpty(SpUtil.getString(AppConstant.LOGIN_USER,"root"))){
             Intent intent = new Intent(mContext, MainActivity.class);
             mContext.startActivity(intent);
             SplashActivity.this.finish();

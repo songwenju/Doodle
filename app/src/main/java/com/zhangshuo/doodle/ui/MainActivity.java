@@ -1,17 +1,17 @@
 package com.zhangshuo.doodle.ui;
 
+
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,15 +22,21 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 import com.zhangshuo.doodle.R;
 import com.zhangshuo.doodle.common.AppConstant;
 import com.zhangshuo.doodle.util.FileUtils;
+import com.zhangshuo.doodle.util.LogUtil;
 import com.zhangshuo.doodle.util.SpUtil;
 import com.zhangshuo.doodle.util.UIUitl;
 import com.zhangshuo.doodle.weight.ColorPickerDialog;
@@ -41,14 +47,9 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
     private final static String Tag = MainActivity.class.getSimpleName();
-//    Android相册中获取图片和路径
-
     private final String IMAGE_TYPE = "image/*";
-
     private final int IMAGE_CODE = 10086;   //这里的IMAGE_CODE是自己任意定义的
-
     private static int[] colors = new int[]{
             R.color.user_icon_1, R.color.user_icon_2, R.color.user_icon_3, R.color.user_icon_4,
             R.color.user_icon_4, R.color.user_icon_6, R.color.user_icon_7, R.color.user_icon_8,
@@ -72,15 +73,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout penLayout;
     private View wait;
     private SeekBar penAlpth;
+
     private Bitmap bm = null;
     private FrameLayout drawLayout;
+
     private AlertDialog mExistDialog;
+    private String path;
+    private TextView rotate3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //微信 appid appsecret
+        PlatformConfig.setWeixin("wxa4489632bd8d69fd", "e4f7157924665f6ed032e1dad30de61f");
+        // QQ和Qzone appid appkey
+        //PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
+        //还在审核的key
+        PlatformConfig.setQQZone("1105294409", "qrqgmMU8Ez7DnQ4I");
         initView();
         initEvent();
     }
@@ -137,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //旋转选择区点击事件
         findViewById(R.id.rotate1).setOnClickListener(this);
         findViewById(R.id.rotate2).setOnClickListener(this);
+        findViewById(R.id.rotate3).setOnClickListener(this);
         //颜色选择区点击事件
         if (colorLayout != null) {
             findViewById(R.id.color_more).setOnClickListener(this);
@@ -159,8 +170,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
         //画布
-        drawView = (DrawView)findViewById(R.id.drawActivity);
-        drawLayout = (FrameLayout)findViewById(R.id.draw_layout);
+        drawView = (DrawView) findViewById(R.id.drawActivity);
+        drawLayout = (FrameLayout) findViewById(R.id.draw_layout);
         drawView = (DrawView) findViewById(R.id.drawActivity);
         assert drawView != null;
         // 设置画布大小 与屏幕一样大 且为方形
@@ -196,6 +207,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         penWidth = ((SeekBar) findViewById(R.id.seekBar));
         //画笔透明度
         penAlpth = ((SeekBar) findViewById(R.id.seekBar1));
+
+        //平移 绘画 切换
+        rotate3 = ((TextView) findViewById(R.id.tv_rotate3));
 
 //        tv_penWidth = ((TextView) findViewById(R.id.pen_width));
 
@@ -271,6 +285,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             //导入图片
             case R.id.insert:
+
                 //开启系统相册选择界面
                 Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
                 getAlbum.setType(IMAGE_TYPE);
@@ -298,13 +313,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) {        //此处的 RESULT_OK 是系统自定义得一个常量
-
-            Log.e(Tag,"ActivityResult resultCode error");
-
+            Log.e(Tag, "ActivityResult resultCode error");
             return;
-
         }
 
         //外界的程序访问ContentProvider所提供数据 可以通过ContentResolver接口
@@ -319,11 +331,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 Uri selectedImage = data.getData();
                 String picturePath = selectedImage.getPath();
-                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
                 Cursor cursor = getContentResolver().query(selectedImage,
                         filePathColumn, null, null, null);
-                if (null !=cursor) {
+                if (null != cursor) {
                     cursor.moveToFirst();
 
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
@@ -332,13 +344,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     picturePath = selectedImage.getPath();
                 }
-                Log.d(Tag,"picturePath = "+picturePath);
-                bm = UIUitl.getSampledBitmap(picturePath,UIUitl.getWindowWidth(),UIUitl.getWindowWidth());
+                Log.d(Tag, "picturePath = " + picturePath);
+                bm = UIUitl.getSampledBitmap(picturePath, UIUitl.getWindowWidth(), UIUitl.getWindowWidth());
 //
                 drawView.setCacheBitmap(bm);
 //                super.onActivityResult(requestCode, resultCode, data);
-            }catch (Exception e){
-                Log.e(Tag,"从相册获取图片失败 : Exception "+e);
+            } catch (Exception e) {
+                Log.e(Tag, "从相册获取图片失败 : Exception " + e);
             }
         }
     }
@@ -347,7 +359,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 退出登录
      */
     private void existLogin() {
-
         mExistDialog.show();
     }
 
@@ -355,21 +366,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 保存图片
      */
     private void savePic() {
-        wait.setVisibility(View.VISIBLE);
-        new Thread(new Runnable() {
+        Bitmap cacheBitmap = drawView.getCacheBitmap();
+        new AsyncTask<Bitmap, Void, String>() {
             @Override
-            public void run() {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss", Locale.CHINA);
-                final String f = FileUtils.saveBitmap(drawView.getCacheBitmap(), format.format(new Date()));
-                UIUitl.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        wait.setVisibility(View.GONE);
-                        Toast.makeText(MainActivity.this, f, Toast.LENGTH_SHORT).show();
-                    }
-                });
+            protected void onPreExecute() {
+                super.onPreExecute();
+                wait.setVisibility(View.VISIBLE);
             }
-        }).start();
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                wait.setVisibility(View.GONE);
+                path = s;
+                Toast.makeText(MainActivity.this, path, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            protected String doInBackground(Bitmap... params) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss", Locale.CHINA);
+                return FileUtils.saveBitmap(params[0], format.format(new Date()));
+            }
+
+        }.execute(cacheBitmap);
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        }).start();
 
     }
 
@@ -377,9 +402,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 分享图片
      */
     private void sharePic() {
-
-        Toast.makeText(this, "分享", Toast.LENGTH_SHORT).show();
+        final SHARE_MEDIA[] displaylist = new SHARE_MEDIA[]{
+                SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE,
+                SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE,
+        };
+        UMImage image;
+        Bitmap bitmap = drawView.getCacheBitmap();
+        if (bitmap != null) {
+            image = new UMImage(this,bitmap);
+        } else {
+            image = new UMImage(this,BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+        }
+//        UMImage image = new UMImage(this, "http://www.umeng.com/images/pic/social/integrated_3.png");
+        new ShareAction(this).setDisplayList(displaylist)
+                .withText("我从Doodle上分享了一张图片[随手涂鸦，快乐生活]")
+                .withTitle("Doodle分享")
+//                .withTargetUrl("http://www.baidu.com")
+                .withMedia(image)
+//                .setListenerList(umShareListener)
+                .open();
     }
+
 
     /**
      * 取色对话框
@@ -407,6 +450,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        penAlpth.setProgress(255);//设置透明度 为255 不透明
         drawView.paint.setXfermode(null);//取消擦出效果
         colorLayout.setVisibility(View.GONE);
         eraserLayout.setVisibility(View.GONE);
@@ -484,6 +528,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.rotate2:
                 //旋转
                 rotateImage();
+                break;
+            case R.id.rotate3:
+                //绘制或者 平移
+                drawView.TOUCH_TYPE = !drawView.TOUCH_TYPE;
+                if(drawView.TOUCH_TYPE){
+                    rotate3.setText("绘画");
+                }else {
+                    rotate3.setText("平移");
+                }
                 break;
             case R.id.color:
                 if (View.VISIBLE == rotateLayout.getVisibility())
