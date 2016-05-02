@@ -1,403 +1,418 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linearLayout_1"
-    android:background="@color/blue_33"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:id="@+id/linearLayout_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/blue_33">
+
     <FrameLayout
-        android:background="@android:color/black"
         android:id="@+id/draw_layout"
-        android:layout_below="@+id/head_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/head_layout"
+        android:background="@android:color/black">
 
         <com.zhangshuo.doodle.weight.DrawView
             android:id="@+id/drawActivity"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
     </FrameLayout>
 
     <View
-        android:layout_below="@+id/draw_layout"
-        android:background="@android:color/black"
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+        android:layout_height="1dp"
+        android:layout_below="@+id/draw_layout"
+        android:background="@android:color/black"/>
 
 
     <LinearLayout
-        android:orientation="vertical"
         android:id="@+id/bottom"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
 
         <include layout="@layout/layout_bottom"/>
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/eraser_layout"
-            android:gravity="center_vertical"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/eraser1"
-                android:gravity="center"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
 
                 <ImageView
                     android:id="@+id/iv_eraser1"
-                    android:background="@mipmap/icon_bg_default"
-                    android:src="@mipmap/icon_eraser"
                     android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:layout_height="40dp"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_eraser"/>
+
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/black_80"
                     android:text="橡皮"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/black_80"
+                    android:textSize="18dp"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/eraser2"
-                android:gravity="center"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
                 <ImageView
                     android:id="@+id/iv_eraser2"
-                    android:background="@mipmap/icon_bg_default"
-                    android:src="@mipmap/icon_clear"
                     android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:layout_height="40dp"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_clear"/>
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/black_80"
                     android:text="清空"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/black_80"
+                    android:textSize="18dp"/>
             </LinearLayout>
 
         </LinearLayout>
+
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/rotate_layout"
-            android:gravity="center_vertical"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/rotate1"
-                android:gravity="center"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
 
                 <ImageView
                     android:id="@+id/iv_rotate1"
-                    android:background="@mipmap/icon_bg_default"
-                    android:src="@mipmap/icon_iso"
                     android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:layout_height="40dp"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_iso"/>
+
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/black_80"
                     android:text="镜像"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/black_80"
+                    android:textSize="18dp"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/rotate2"
-                android:gravity="center"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
                 <ImageView
                     android:id="@+id/iv_rotate2"
-                    android:background="@mipmap/icon_bg_default"
-                    android:src="@mipmap/icon_rotate"
                     android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:layout_height="40dp"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_rotate"/>
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/black_80"
                     android:text="旋转"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/black_80"
+                    android:textSize="18dp"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/rotate3"
-                android:gravity="center"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
                 <ImageView
                     android:id="@+id/iv_rotate3"
-                    android:background="@mipmap/icon_bg_default"
-                    android:src="@mipmap/icon_rotate"
                     android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:layout_height="40dp"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_rotate"/>
 
                 <TextView
                     android:id="@+id/tv_rotate3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/black_80"
                     android:text="绘画"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/black_80"
+                    android:textSize="18dp"/>
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/pen_layout"
-            android:weightSum="5"
-            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:background="@color/transparent"
             android:gravity="center_vertical"
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:weightSum="5">
 
             <LinearLayout
                 android:id="@+id/pen1"
-                android:gravity="center"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
 
                 <ImageView
-                    android:background="@mipmap/icon_bg_default"
-                    android:src="@mipmap/icon_pencil"
                     android:id="@+id/iv_pen1"
                     android:layout_width="40dp"
-                    android:layout_height="40dp"/>
+                    android:layout_height="40dp"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_pencil"/>
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/black_80"
                     android:text="铅笔"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/black_80"
+                    android:textSize="18dp"/>
             </LinearLayout>
 
 
             <LinearLayout
                 android:id="@+id/pen2"
-                android:gravity="center"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
 
                 <ImageView
                     android:id="@+id/iv_pen2"
-                    android:background="@mipmap/icon_bg_default"
-                    android:src="@mipmap/icon_blur"
                     android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:layout_height="40dp"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_blur"/>
+
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/black_80"
                     android:text="毛笔"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/black_80"
+                    android:textSize="18dp"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/pen3"
-                android:gravity="center"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
                 <ImageView
                     android:id="@+id/iv_pen3"
-                    android:background="@mipmap/icon_bg_default"
-                    android:src="@mipmap/icon_emboss"
                     android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:layout_height="40dp"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_emboss"/>
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/black_80"
                     android:text="蜡笔"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/black_80"
+                    android:textSize="18dp"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/pen4"
-                android:gravity="center"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
                 <ImageView
                     android:id="@+id/iv_pen4"
-                    android:background="@mipmap/icon_bg_default"
-                    android:src="@mipmap/icon_tspen"
                     android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:layout_height="40dp"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_tspen"/>
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/black_80"
                     android:text="水彩"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/black_80"
+                    android:textSize="18dp"/>
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/pen5"
-                android:gravity="center"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
                 <ImageView
                     android:id="@+id/iv_pen5"
-                    android:background="@mipmap/icon_bg_default"
-                    android:src="@mipmap/icon_fluorescent"
                     android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:layout_height="40dp"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_fluorescent"/>
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/black_80"
                     android:text="荧光"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/black_80"
+                    android:textSize="18dp"/>
             </LinearLayout>
 
         </LinearLayout>
 
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
             android:layout_marginBottom="10dp"
-            android:weightSum="4"
-            android:orientation="horizontal"
             android:background="@color/transparent"
             android:gravity="center_vertical"
-            android:layout_width="match_parent"
-            android:layout_height="55dp">
+            android:orientation="horizontal"
+            android:weightSum="4">
 
             <LinearLayout
                 android:id="@+id/color"
-                android:gravity="center"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
 
                 <ImageView
-                    android:src="@mipmap/icon_color"
                     android:id="@+id/iv_color"
                     android:layout_width="40dp"
-                    android:layout_height="40dp"/>
+                    android:layout_height="40dp"
+                    android:src="@mipmap/icon_color"/>
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/black_80"
                     android:text="颜色"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/black_80"
+                    android:textSize="18dp"/>
             </LinearLayout>
 
 
             <LinearLayout
                 android:id="@+id/eraser"
-                android:gravity="center"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
 
                 <ImageView
                     android:id="@+id/iv_eraser"
-                    android:background="@mipmap/icon_bg_default"
-                    android:src="@mipmap/icon_eraser"
                     android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:layout_height="40dp"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_eraser"/>
+
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/black_80"
                     android:text="橡皮"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/black_80"
+                    android:textSize="18dp"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/pen"
-                android:gravity="center"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
                 <ImageView
                     android:id="@+id/iv_pen"
-                    android:background="@mipmap/icon_bg_default"
-                    android:src="@mipmap/icon_pencil"
                     android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:layout_height="40dp"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_pencil"/>
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/black_80"
                     android:text="画笔"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/black_80"
+                    android:textSize="18dp"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/rotate"
-                android:gravity="center"
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
                 <ImageView
                     android:id="@+id/iv_rotate"
-                    android:background="@mipmap/icon_bg_default"
-                    android:src="@mipmap/icon_rotate"
                     android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:layout_height="40dp"
+                    android:background="@mipmap/icon_bg_default"
+                    android:src="@mipmap/icon_rotate"/>
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/black_80"
                     android:text="旋转"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/black_80"
+                    android:textSize="18dp"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -405,73 +420,76 @@
 
 
     <View
-        android:layout_centerInParent="true"
         android:id="@+id/color_preview"
         android:layout_width="50dp"
-        android:layout_height="50dp"/>
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"/>
 
     <LinearLayout
-        android:gravity="center_vertical"
         android:id="@+id/head_layout"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <SeekBar
-            android:maxHeight="10dp"
-            android:thumb="@mipmap/icon_seek_point"
+            android:layout_marginLeft="5dp"
+            android:id="@+id/seekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@mipmap/icon_bg_seekbar"
             android:max="100"
-            android:layout_weight="1"
+            android:maxHeight="10dp"
+            android:thumb="@mipmap/icon_seek_point"/>
+
+        <TextView
+            android:id="@+id/pen_width"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="像素值"
+            android:textColor="@color/black_80"
+            android:textSize="14dp"/>
+
+        <SeekBar
+            android:id="@+id/seekBar1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/seekBar" />
-        <TextView
-            android:visibility="invisible"
-            android:gravity="center"
-            android:id="@+id/pen_width"
             android:layout_marginLeft="2dp"
-            android:layout_marginStart="5dp"
-            android:textSize="18dp"
-            android:textColor="@color/black_80"
-            android:text="像素值"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
-        <SeekBar
-            android:thumb="@mipmap/icon_seek_point"
+            android:layout_marginStart="2dp"
+            android:progress="255"
+            android:layout_weight="1"
             android:background="@mipmap/icon_bg_seekbar"
             android:max="255"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/seekBar1" />
+            android:thumb="@mipmap/icon_seek_point"/>
+
         <TextView
-            android:visibility="gone"
-            android:gravity="center"
             android:id="@+id/pen_alpha"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:textSize="18dp"
-            android:textColor="@color/black_80"
-            android:text="透明度"
             android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginRight="2dp"
+            android:gravity="center"
+            android:text="透明度"
+            android:textColor="@color/black_80"
+            android:textSize="14dp"/>
     </LinearLayout>
 
 
     <FrameLayout
-        android:visibility="gone"
-        android:layout_above="@+id/bottom"
-        android:background="@color/black_fe"
         android:id="@+id/wait"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom"
+        android:background="@color/black_fe"
+        android:visibility="gone">
 
         <ProgressBar
-            android:layout_gravity="center"
+            android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/progressBar" />
+            android:layout_gravity="center"/>
     </FrameLayout>
 
 

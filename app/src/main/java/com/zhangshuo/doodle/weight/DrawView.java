@@ -11,13 +11,10 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.text.method.Touch;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.zhangshuo.doodle.util.LogUtil;
 import com.zhangshuo.doodle.util.UIUitl;
 
 import java.io.File;
@@ -79,8 +76,8 @@ public class DrawView extends View {
         paint.setColor(paintColor);
         //设置画笔风格
         paint.setStyle(Paint.Style.STROKE);//填充轮廓
-        paint.setStrokeJoin(Paint.Join.ROUND);//??????????????????????????????????????????
-        paint.setStrokeCap(Paint.Cap.BUTT);//?????????????????????????????????
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setStrokeCap(Paint.Cap.BUTT);
         paint.setStrokeWidth(paintWidth);//设置笔触宽度
         paint.setAntiAlias(true);//设置抗锯齿功能，稍微耗费内存
         paint.setDither(true);//使用抖动效果对手抖动结果进行处理
@@ -139,7 +136,7 @@ public class DrawView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        LogUtil.e("MOTION_EVENT","OnTouch");
+//        LogUtil.e("MOTION_EVENT","OnTouch");
         float x ;
         float y ;
         if(TOUCH_TYPE) {
@@ -340,7 +337,11 @@ public class DrawView extends View {
      * @return 返回当前显示的bitmap
      */
     public Bitmap getCacheBitmap() {
-        return cacheBitmap;
+        Bitmap bit = cacheBitmap.copy(Bitmap.Config.RGB_565, true);
+        Canvas canvas = new Canvas(bit);
+        canvas.drawColor(Color.WHITE);
+        canvas.drawBitmap(cacheBitmap,new Matrix(),new Paint());
+        return bit;
     }
     /**
      * * 功能：设置画笔风格

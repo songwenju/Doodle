@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.zhangshuo.doodle.R;
@@ -38,6 +39,7 @@ import com.zhangshuo.doodle.common.AppConstant;
 import com.zhangshuo.doodle.util.FileUtils;
 import com.zhangshuo.doodle.util.LogUtil;
 import com.zhangshuo.doodle.util.SpUtil;
+import com.zhangshuo.doodle.util.ToastUtil;
 import com.zhangshuo.doodle.util.UIUitl;
 import com.zhangshuo.doodle.weight.ColorPickerDialog;
 import com.zhangshuo.doodle.weight.DrawView;
@@ -89,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         PlatformConfig.setWeixin("wxa4489632bd8d69fd", "e4f7157924665f6ed032e1dad30de61f");
         // QQ和Qzone appid appkey
         //PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
-        //还在审核的key
         PlatformConfig.setQQZone("1105294409", "qrqgmMU8Ez7DnQ4I");
         initView();
         initEvent();
@@ -120,12 +121,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (progress < 1)
                     progress = 1;
                 drawView.setPaintWidth(progress);
-//                tv_penWidth.setText(progress + "");
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
@@ -318,15 +317,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.e(Tag, "ActivityResult resultCode error");
             return;
         }
-
         //外界的程序访问ContentProvider所提供数据 可以通过ContentResolver接口
-
         ContentResolver resolver = getContentResolver();
-
         //此处的用于判断接收的Activity是不是你想要的那个
-
         if (requestCode == IMAGE_CODE) {
-
             try {
 
                 Uri selectedImage = data.getData();
@@ -389,12 +383,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
         }.execute(cacheBitmap);
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//            }
-//        }).start();
 
     }
 
@@ -409,18 +397,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         UMImage image;
         Bitmap bitmap = drawView.getCacheBitmap();
         if (bitmap != null) {
-            image = new UMImage(this,bitmap);
+            image = new UMImage(this, bitmap);
         } else {
-            image = new UMImage(this,BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+            image = new UMImage(this, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
         }
-//        UMImage image = new UMImage(this, "http://www.umeng.com/images/pic/social/integrated_3.png");
+
         new ShareAction(this).setDisplayList(displaylist)
-                .withText("我从Doodle上分享了一张图片[随手涂鸦，快乐生活]")
-                .withTitle("Doodle分享")
+//                .withText("我从Doodle上分享了一张图片[随手涂鸦，快乐生活]")
+//                .withTitle("Doodle分享")
 //                .withTargetUrl("http://www.baidu.com")
                 .withMedia(image)
-//                .setListenerList(umShareListener)
+                .setListenerList(new UMShareListener() {
+                    @Override
+                    public void onResult(SHARE_MEDIA platform) {
+                        LogUtil.i("share", platform.toString());
+                        ToastUtil.showToast("分享成功");
+                    }
+
+                    @Override
+                    public void onError(SHARE_MEDIA platform, Throwable t) {
+                        LogUtil.i("share", platform.toString() + t.toString());
+                        ToastUtil.showToast("分享失败");
+                    }
+
+                    @Override
+                    public void onCancel(SHARE_MEDIA platform) {
+                        LogUtil.i("share", platform.toString());
+                        ToastUtil.showToast("取消分享");
+                    }
+                })
                 .open();
+
+
     }
 
 
@@ -532,9 +540,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.rotate3:
                 //绘制或者 平移
                 drawView.TOUCH_TYPE = !drawView.TOUCH_TYPE;
-                if(drawView.TOUCH_TYPE){
+                if (drawView.TOUCH_TYPE) {
                     rotate3.setText("绘画");
-                }else {
+                } else {
                     rotate3.setText("平移");
                 }
                 break;
