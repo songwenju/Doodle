@@ -3,7 +3,6 @@ package com.zhangshuo.doodle.util;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -12,15 +11,10 @@ import android.text.TextUtils;
 import com.zhangshuo.doodle.base.BaseApplication;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- * Created by zhaokai on 09/04/16.
- *
- */
 public class FileUtils {
 
     public static String getDoodlePath() {

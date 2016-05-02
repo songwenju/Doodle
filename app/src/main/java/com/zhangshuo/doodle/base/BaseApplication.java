@@ -6,10 +6,7 @@ import android.os.Handler;
 
 import com.umeng.socialize.UMShareAPI;
 
-/**
- * Created by zhaokai on 16/4/9.
- *
- */
+
 public class BaseApplication extends Application {
     public static Context mAppContext;
     public static BaseApplication application = new BaseApplication();

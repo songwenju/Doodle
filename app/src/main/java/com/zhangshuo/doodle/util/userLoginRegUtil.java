@@ -11,10 +11,6 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 作者： songwenju on 2016/4/17 22:24.
- * 邮箱： songwenju@outlook.com
- */
 public class UserLoginRegUtil {
     /**
      * 登录，并获得服务器登录信息

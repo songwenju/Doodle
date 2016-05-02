@@ -1,13 +1,11 @@
 package com.zhangshuo.doodle.ui;
 
 
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -63,12 +61,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout penEraser;
     private SeekBar penWidth;
     private LinearLayout penRotate;
-
     private ImageView iv_pen;
     private ImageView iv_eraser;
     private ImageView iv_color;
     private LinearLayout bottom;
-    //    private TextView tv_penWidth;
     private LinearLayout eraserLayout;
     private LinearLayout rotateLayout;
     private ImageView iv_rotate;
@@ -90,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //微信 appid appsecret
         PlatformConfig.setWeixin("wxa4489632bd8d69fd", "e4f7157924665f6ed032e1dad30de61f");
         // QQ和Qzone appid appkey
-        //PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
         PlatformConfig.setQQZone("1105294409", "qrqgmMU8Ez7DnQ4I");
         initView();
         initEvent();
@@ -209,9 +204,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //平移 绘画 切换
         rotate3 = ((TextView) findViewById(R.id.tv_rotate3));
-
-//        tv_penWidth = ((TextView) findViewById(R.id.pen_width));
-
         wait = findViewById(R.id.wait);
         initExistDialog();
     }
@@ -247,63 +239,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //重写菜单方法
     public boolean onOptionsItemSelected(MenuItem item) {
 
-//        drawView.paint.setXfermode(null);//取消擦出效果
-//        drawView.paint.setStrokeWidth(1);//初始化画笔的宽度
-
-        switch (item.getItemId())//返回菜单项的标识符
-        {
-            /***
-             * 设置paint颜色
-             */
-            case R.id.red:
-                drawView.paint.setColor(Color.RED);
-                item.setChecked(true);
-                break;
-            case R.id.blue:
-                drawView.paint.setColor(Color.BLUE);
-                item.setChecked(true);
-                break;
-            case R.id.green:
-                drawView.paint.setColor(Color.GREEN);
-                item.setChecked(true);
-                break;
-            /***
-             * 设置笔宽
-             */
-            case R.id.width_1:
-                drawView.paint.setStrokeWidth(1);
-                item.setChecked(true);
-                break;
-            case R.id.width_5:
-                drawView.paint.setStrokeWidth(5);
-                item.setChecked(true);
-                break;
-            case R.id.width_10:
-                drawView.paint.setStrokeWidth(10);
-                item.setChecked(true);
-                break;
+        switch (item.getItemId()){//返回菜单项的标识符
             //导入图片
             case R.id.insert:
-
                 //开启系统相册选择界面
                 Intent getAlbum = new Intent(Intent.ACTION_GET_CONTENT);
                 getAlbum.setType(IMAGE_TYPE);
                 startActivityForResult(getAlbum, IMAGE_CODE);
-
-                Toast.makeText(this, "导入图片", Toast.LENGTH_SHORT).show();
-
+                ToastUtil.showToast("导入图片");
                 break;
-            //分享
-            case R.id.share:
+            case R.id.share:  //分享
                 sharePic();
                 break;
             case R.id.exit_login:
                 existLogin();
                 break;
-            /**
-             * 保存图片
-             */
-            case R.id.save:
+            case R.id.save: //保存图片
                 savePic();
                 break;
         }
@@ -317,8 +268,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.e(Tag, "ActivityResult resultCode error");
             return;
         }
-        //外界的程序访问ContentProvider所提供数据 可以通过ContentResolver接口
-        ContentResolver resolver = getContentResolver();
         //此处的用于判断接收的Activity是不是你想要的那个
         if (requestCode == IMAGE_CODE) {
             try {
@@ -340,9 +289,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 Log.d(Tag, "picturePath = " + picturePath);
                 bm = UIUitl.getSampledBitmap(picturePath, UIUitl.getWindowWidth(), UIUitl.getWindowWidth());
-//
                 drawView.setCacheBitmap(bm);
-//                super.onActivityResult(requestCode, resultCode, data);
             } catch (Exception e) {
                 Log.e(Tag, "从相册获取图片失败 : Exception " + e);
             }
@@ -411,24 +358,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onResult(SHARE_MEDIA platform) {
                         LogUtil.i("share", platform.toString());
-                        ToastUtil.showToast("分享成功");
                     }
 
                     @Override
                     public void onError(SHARE_MEDIA platform, Throwable t) {
                         LogUtil.i("share", platform.toString() + t.toString());
-                        ToastUtil.showToast("分享失败");
                     }
 
                     @Override
                     public void onCancel(SHARE_MEDIA platform) {
                         LogUtil.i("share", platform.toString());
-                        ToastUtil.showToast("取消分享");
                     }
                 })
                 .open();
-
-
     }
 
 

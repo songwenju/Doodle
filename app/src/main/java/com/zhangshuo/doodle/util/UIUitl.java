@@ -3,20 +3,13 @@ package com.zhangshuo.doodle.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Rect;
 import android.util.DisplayMetrics;
-import android.util.FloatMath;
 import android.view.Display;
 import android.view.WindowManager;
 
 import com.zhangshuo.doodle.base.BaseApplication;
 
-/**
- * Created by zhaokai on 16/4/9.
- *
- */
 public class UIUitl {
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)

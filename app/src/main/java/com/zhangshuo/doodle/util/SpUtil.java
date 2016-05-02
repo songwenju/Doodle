@@ -8,8 +8,6 @@ import com.zhangshuo.doodle.base.BaseApplication;
 
 /**
  * sharedPreferences的管理类
- * 作者：songwenju on 2016/1/31 10:34
- * 邮箱：songwenju01@163.com
  */
 public class SpUtil {
     private static SharedPreferences mSp;

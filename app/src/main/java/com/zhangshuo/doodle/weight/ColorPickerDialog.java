@@ -20,10 +20,6 @@ import android.view.WindowManager;
 import com.zhangshuo.doodle.R;
 import com.zhangshuo.doodle.util.UIUitl;
 
-/**
- * Created by zhaokai on 16/4/9.
- *
- */
 public class ColorPickerDialog extends Dialog{
 
     private final static boolean debug = true;

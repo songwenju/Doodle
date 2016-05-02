@@ -6,10 +6,6 @@ import android.widget.Toast;
 import com.zhangshuo.doodle.base.BaseApplication;
 
 
-/**
- * 作者：songwenju on 2016/1/31 21:12
- * 邮箱：songwenju01@163.com
- */
 public class ToastUtil {
     private static Toast toast;
 

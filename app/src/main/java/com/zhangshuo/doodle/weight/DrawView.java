@@ -26,6 +26,7 @@ import java.io.IOException;
  *
  */
 public class DrawView extends View {
+    private final Path pathCache;
     private Context mContext;
     private int view_width = 0;//屏幕宽度
     private int view_height = 0;//屏幕高度
@@ -47,7 +48,8 @@ public class DrawView extends View {
     //图像绘画起始坐标 左 上
     private float left = 0;
     private float top = 0;
-
+    private float preXCache;
+    private float preYCache;
 
     public DrawView(Context context, AttributeSet attributeSet)//写一个构造方法初始化类
     {
@@ -68,6 +70,7 @@ public class DrawView extends View {
         cacheBitmap = Bitmap.createBitmap(view_width, view_height, Bitmap.Config.ARGB_8888);
         cacheCanvas.setBitmap(cacheBitmap);
         path = new Path();
+        pathCache = new Path();
 //        cacheCanvas.setBitmap(cacheBitmap);//在cache的上边绘制cacheBitmap
         paint = new Paint(Paint.DITHER_FLAG);//抗抖动
         /**Paint flag that enables dithering when blitting.
@@ -112,6 +115,8 @@ public class DrawView extends View {
         canvas.drawPath(path,paint);
         canvas.save(Canvas.ALL_SAVE_FLAG);//保存Canvas的状态
         canvas.restore();//恢复canver之前保存的状态 ，防止保存后对canver执行的操作对后续的绘制有影响
+
+//        LogUtil.e("OnDraw","canvas : ");
         //super.onDraw(canvas);
     }
 //
@@ -139,9 +144,13 @@ public class DrawView extends View {
 //        LogUtil.e("MOTION_EVENT","OnTouch");
         float x ;
         float y ;
+        float xCache = 0;
+        float yCache = 0;
         if(TOUCH_TYPE) {
-            x = event.getX() + left;
-            y = event.getY() + top;
+            x = event.getX();
+            y = event.getY();
+            xCache = x - left;
+            yCache = y - top;
         }else {
             x = event.getX();
             y = event.getY();
@@ -149,9 +158,14 @@ public class DrawView extends View {
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN://按下时  只是将该点坐标设置为起点坐标
+                path.reset();
                 path.moveTo(x,y);//将这个点设置为路径的起点
+                pathCache.moveTo(xCache,yCache);
                 preX = x;//将x值赋给 起始X坐标
                 preY = y;
+
+                preXCache = xCache;
+                preYCache = yCache;
                 break;
             case MotionEvent.ACTION_MOVE://手势(ACTION_DOWN和ACTION_UP之间)。包含最近点的运动，以及任何中间点自上一下按下或移动事件。
 
@@ -161,12 +175,16 @@ public class DrawView extends View {
                     if (dx >= 5 || dy >= 5)//判断是否在允许的范围内
                     {
                         path.quadTo(preX, preY, (x + preX) / 2, (y + preY) / 2);
-                        /***添加一种二次贝塞尔曲线，从过去点，逼近控制点(x1,y1)和结束(x2,y2)。
+                        pathCache.quadTo(preXCache, preYCache, (xCache + preXCache) / 2, (yCache + preYCache) / 2);
+                        /**添加一种二次贝塞尔曲线，从过去点，逼近控制点(x1,y1)和结束(x2,y2)。
                          * 如果没有moveTo()调用了这个轮廓，首先自动设置为(00)*/
                         preX = x;
                         preY = y;
+
+                        preXCache = xCache;
+                        preYCache = yCache;
                     }
-                }else if(TOUCH_TYPE == TYPE_MOVE){
+                }else {
                     float ddx = Math.abs(x - preX);//取绝对值赋给dx
                     float ddy = Math.abs(y - preY);
                     if (ddx >= 5 || ddy >= 5)//判断是否在允许的范围内
@@ -183,7 +201,7 @@ public class DrawView extends View {
                 }
                 break;
             case MotionEvent.ACTION_UP://位置以及任何中间点从过去或移动事件后，一个按下的动作完成了。
-                cacheCanvas.drawPath(path,paint);//绘制路径
+                cacheCanvas.drawPath(pathCache,paint);//绘制路径
                 path.reset();//复位
 //                TOUCH_TYPE = TYPE_DRAW;//模式复位
                 break;
@@ -264,6 +282,8 @@ public class DrawView extends View {
 //            System.gc();
 //        }
 
+        pathCache.reset();
+        path.reset();
         //次数 创建的bitmap 必须是可以更改的  否则 绘画无效
         lastBitmap = cacheBitmap.copy(Bitmap.Config.RGB_565,true);
         this.cacheBitmap = cacheBitmap.copy(Bitmap.Config.RGB_565,true);
@@ -382,6 +402,5 @@ public class DrawView extends View {
         int TS_PEN = 4;
         int FLUORESCENT = 5;
     }
-
 
 }
