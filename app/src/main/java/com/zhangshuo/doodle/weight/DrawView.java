@@ -21,13 +21,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-/**
- * Created by zhaokai on 2016/04/04.
- *
- */
+
 public class DrawView extends View {
     private final Path pathCache;
-    private Context mContext;
     private int view_width = 0;//屏幕宽度
     private int view_height = 0;//屏幕高度
     private float preX;//起始点的X坐标
@@ -37,7 +33,7 @@ public class DrawView extends View {
     Bitmap cacheBitmap = null;//定义一个内存中的图片，该图片将作为缓冲区
     Canvas cacheCanvas = null;//定义一个画布
     private float paintWidth = 1;//画笔宽度
-    private int backColor = Color.WHITE;
+    private int backColor = Color.BLACK;
     private int paintColor = Color.BLUE;
     private Paint bmpPaint ;
     private Bitmap lastBitmap;
@@ -45,20 +41,24 @@ public class DrawView extends View {
 
     private final static boolean TYPE_MOVE = false;
     private final static boolean TYPE_DRAW = true;
+
     //图像绘画起始坐标 左 上
     private float left = 0;
     private float top = 0;
+    //实际bitmap 起始位置
     private float preXCache;
     private float preYCache;
+    //上次的颜色
+    private int lastColor;
+
 
     public DrawView(Context context, AttributeSet attributeSet)//写一个构造方法初始化类
     {
         super(context, attributeSet);
-        this.mContext = context;
 
         cacheCanvas = new Canvas();
         /***
-         * Bitmap.Config 	ALPHA_8 	Each pixel is stored as a single translucency (alpha) channel.
+         *Bitmap.Config 	ALPHA_8 	Each pixel is stored as a single translucency (alpha) channel.
          Bitmap.Config 	ARGB_4444 	This field was deprecated in API level 13. Because of the poor quality of this configuration, it is advised to use ARGB_8888 instead.
          Bitmap.Config 	ARGB_8888 	Each pixel is stored on 4 bytes.
          Bitmap.Config 	RGB_565 	Each pixel is stored on 2 bytes and only the RGB channels are encoded: red is stored with 5 bits of precision (32 possible values), green is stored with 6 bits of precision (64 possible values) and blue is stored with 5 bits of precision.
@@ -69,6 +69,8 @@ public class DrawView extends View {
         //创建一个与该View相同大小的缓冲区
         cacheBitmap = Bitmap.createBitmap(view_width, view_height, Bitmap.Config.ARGB_8888);
         cacheCanvas.setBitmap(cacheBitmap);
+        cacheCanvas.drawColor(Color.WHITE);
+        lastBitmap = cacheBitmap.copy(Bitmap.Config.RGB_565,true);
         path = new Path();
         pathCache = new Path();
 //        cacheCanvas.setBitmap(cacheBitmap);//在cache的上边绘制cacheBitmap
@@ -90,11 +92,6 @@ public class DrawView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//            view_width = getMeasuredWidth();//context.getResources().getDisplayMetrics().widthPixels;//获取屏幕的宽度   /*显示度量标准*宽像素
-//            view_height = getMeasuredHeight();//context.getResources().getDisplayMetrics().widthPixels;
-//            //创建一个与该View相同大小的缓冲区
-//            cacheBitmap = Bitmap.createBitmap(view_width, view_height, Bitmap.Config.ARGB_8888);
-//            cacheCanvas.setBitmap(cacheBitmap);
     }
 
     //此时 view 已经测量完成
@@ -112,15 +109,12 @@ public class DrawView extends View {
          left	The position of the left side of the bitmap being drawn
          top	The position of the top side of the bitmap being drawn
          paint	The paint used to draw the bitmap (may be null)*/
-        canvas.drawPath(path,paint);
+        canvas.drawPath(path, paint);
         canvas.save(Canvas.ALL_SAVE_FLAG);//保存Canvas的状态
         canvas.restore();//恢复canver之前保存的状态 ，防止保存后对canver执行的操作对后续的绘制有影响
 
-//        LogUtil.e("OnDraw","canvas : ");
-        //super.onDraw(canvas);
     }
-//
-    //TODO 获取不到 第二个触摸点
+    //获取不到 第二个触摸点 废弃
 //    @Override
 //    public boolean dispatchTouchEvent(MotionEvent event) {
 //        switch (event.getAction()){
@@ -141,7 +135,6 @@ public class DrawView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-//        LogUtil.e("MOTION_EVENT","OnTouch");
         float x ;
         float y ;
         float xCache = 0;
@@ -158,7 +151,6 @@ public class DrawView extends View {
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN://按下时  只是将该点坐标设置为起点坐标
-                path.reset();
                 path.moveTo(x,y);//将这个点设置为路径的起点
                 pathCache.moveTo(xCache,yCache);
                 preX = x;//将x值赋给 起始X坐标
@@ -172,8 +164,8 @@ public class DrawView extends View {
                 if(TOUCH_TYPE) {
                     float dx = Math.abs(x - preX);//取绝对值赋给dx
                     float dy = Math.abs(y - preY);
-                    if (dx >= 5 || dy >= 5)//判断是否在允许的范围内
-                    {
+//                    if (dx >= 5 || dy >= 5)//判断是否在允许的范围内
+//                    {
                         path.quadTo(preX, preY, (x + preX) / 2, (y + preY) / 2);
                         pathCache.quadTo(preXCache, preYCache, (xCache + preXCache) / 2, (yCache + preYCache) / 2);
                         /**添加一种二次贝塞尔曲线，从过去点，逼近控制点(x1,y1)和结束(x2,y2)。
@@ -183,7 +175,7 @@ public class DrawView extends View {
 
                         preXCache = xCache;
                         preYCache = yCache;
-                    }
+//                    }
                 }else {
                     float ddx = Math.abs(x - preX);//取绝对值赋给dx
                     float ddy = Math.abs(y - preY);
@@ -201,8 +193,9 @@ public class DrawView extends View {
                 }
                 break;
             case MotionEvent.ACTION_UP://位置以及任何中间点从过去或移动事件后，一个按下的动作完成了。
-                cacheCanvas.drawPath(pathCache,paint);//绘制路径
-                path.reset();//复位
+                cacheCanvas.drawPath(pathCache,paint);//绘制路径到缓存 bitmap
+                path.reset();
+                pathCache.reset();
 //                TOUCH_TYPE = TYPE_DRAW;//模式复位
                 break;
         }
@@ -210,13 +203,7 @@ public class DrawView extends View {
         return true;//返回ture 表明处理方法已经处理该事件
     }
     /**Clear方法实现橡皮擦功能*/
-    public void clear()
-    {
-        // 波特-达夫相交    相交模式       清理
-        // 对于导入的图片处理不好
-//        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));//设置图形重叠时的处理方式
-//        paint.setStrokeWidth(paintWidth);//相交宽度
-//        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+    public void clear() {
         //用白色直接覆盖
         paint.setColor(Color.WHITE);
         paint.setMaskFilter(null);//清空画笔样式
@@ -266,6 +253,7 @@ public class DrawView extends View {
      * @param paintColor 画笔颜色
      */
     public void setPaintColor(int paintColor) {
+        lastColor = paintColor;
         this.paintColor = paintColor;
         paint.setColor(paintColor);
     }
@@ -277,14 +265,9 @@ public class DrawView extends View {
     }
 
     public void setCacheBitmap(Bitmap cacheBitmap) {
-//        if(this.cacheBitmap!=null&&!this.cacheBitmap.isRecycled()){
-//            this.cacheBitmap.recycle();
-//            System.gc();
-//        }
-
         pathCache.reset();
         path.reset();
-        //次数 创建的bitmap 必须是可以更改的  否则 绘画无效
+        //此处 创建的bitmap 必须是可以更改的  否则 绘画无效
         lastBitmap = cacheBitmap.copy(Bitmap.Config.RGB_565,true);
         this.cacheBitmap = cacheBitmap.copy(Bitmap.Config.RGB_565,true);
 //        cacheCanvas.drawBitmap(cacheBitmap,new Matrix(),bmpPaint);
@@ -342,10 +325,17 @@ public class DrawView extends View {
         return Bitmap.createBitmap(bmp, 0, 0, w, h, matrix, true);
     }
 
+    /**
+     * 设置透明度
+     * @param progress 透明度 0 ~ 255
+     */
     public void setAlpha(int progress) {
         paint.setAlpha(progress);
     }
 
+    /**
+     * 翻转模式
+     */
     public enum ConvertMode {
         VERTICAL,
         LEVEL,
@@ -365,11 +355,12 @@ public class DrawView extends View {
     }
     /**
      * * 功能：设置画笔风格
-     * @param mPaintType
+     * @param mPaintType 画笔风格 PEN_TYPE
      * @return MaskFilter
      */
     public MaskFilter setMaskFilter(int mPaintType){
         MaskFilter maskFilter = null;
+        paint.setColor(lastColor);
         paint.setAlpha(255);
         switch (mPaintType) {
             case PEN_TYPE.PLAIN_PEN://签字笔风格
@@ -395,6 +386,10 @@ public class DrawView extends View {
         paint.setMaskFilter(maskFilter);
         return maskFilter;
     }
+
+    /**
+     * 画笔可选风格
+     */
     public interface PEN_TYPE{
         int PLAIN_PEN = 1;
         int BLUR = 2;
@@ -402,5 +397,4 @@ public class DrawView extends View {
         int TS_PEN = 4;
         int FLUORESCENT = 5;
     }
-
 }

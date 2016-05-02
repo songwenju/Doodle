@@ -394,6 +394,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param color 颜色值
      */
     private void setPaintColor(int color) {
+
         drawView.setPaintColor(color);
         iv_color.setBackgroundColor(color);
     }
@@ -492,6 +493,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (View.VISIBLE == rotateLayout.getVisibility())
                     rotateLayout.setVisibility(View.GONE);
                 colorLayout.setVisibility(View.VISIBLE);
+                iv_pen.setBackgroundResource(R.mipmap.icon_bg_pen);
+                iv_eraser.setBackgroundResource(R.mipmap.icon_bg_default);
+                iv_rotate.setBackgroundResource(R.mipmap.icon_bg_default);
                 break;
             case R.id.drawActivity:
                 Log.e("hide ", "click");
