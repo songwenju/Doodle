@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.umeng.socialize.PlatformConfig;
@@ -35,6 +36,7 @@ import com.umeng.socialize.media.UMImage;
 import com.zhangshuo.doodle.R;
 import com.zhangshuo.doodle.common.AppConstant;
 import com.zhangshuo.doodle.util.FileUtils;
+import com.zhangshuo.doodle.util.LogUtil;
 import com.zhangshuo.doodle.util.SpUtil;
 import com.zhangshuo.doodle.util.UIUitl;
 import com.zhangshuo.doodle.weight.ColorPickerDialog;
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private AlertDialog mExistDialog;
     private String path;
+    private TextView rotate3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //旋转选择区点击事件
         findViewById(R.id.rotate1).setOnClickListener(this);
         findViewById(R.id.rotate2).setOnClickListener(this);
+        findViewById(R.id.rotate3).setOnClickListener(this);
         //颜色选择区点击事件
         if (colorLayout != null) {
             findViewById(R.id.color_more).setOnClickListener(this);
@@ -203,6 +207,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         penWidth = ((SeekBar) findViewById(R.id.seekBar));
         //画笔透明度
         penAlpth = ((SeekBar) findViewById(R.id.seekBar1));
+
+        //平移 绘画 切换
+        rotate3 = ((TextView) findViewById(R.id.tv_rotate3));
 
 //        tv_penWidth = ((TextView) findViewById(R.id.pen_width));
 
@@ -399,10 +406,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE,
                 SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE,
         };
-        savePic();
         UMImage image;
-        if (path != null) {
-            image = new UMImage(this, BitmapFactory.decodeFile(path));
+        Bitmap bitmap = drawView.getCacheBitmap();
+        if (bitmap != null) {
+            image = new UMImage(this,bitmap);
         } else {
             image = new UMImage(this,BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
         }
@@ -443,6 +450,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        penAlpth.setProgress(255);//设置透明度 为255 不透明
         drawView.paint.setXfermode(null);//取消擦出效果
         colorLayout.setVisibility(View.GONE);
         eraserLayout.setVisibility(View.GONE);
@@ -520,6 +528,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.rotate2:
                 //旋转
                 rotateImage();
+                break;
+            case R.id.rotate3:
+                //绘制或者 平移
+                drawView.TOUCH_TYPE = !drawView.TOUCH_TYPE;
+                if(drawView.TOUCH_TYPE){
+                    rotate3.setText("绘画");
+                }else {
+                    rotate3.setText("平移");
+                }
                 break;
             case R.id.color:
                 if (View.VISIBLE == rotateLayout.getVisibility())
